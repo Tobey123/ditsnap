@@ -29,4 +29,4 @@ Prebuild executable is available here.
 <img src="images/screenshot2.png" height="400">
 
 ##Build Environment
-Visual C++ 2013
+Visual C++ 2013 x64

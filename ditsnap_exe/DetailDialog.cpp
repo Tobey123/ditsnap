@@ -82,40 +82,26 @@ void CDetailDialog::SetupListItems()
 	try
 	{
 		detailListView_.DeleteAllItems();
-		if (!checkBox_.GetCheck())
+		bool filterNoValue = (bool)checkBox_.GetCheck();
+		int visibleColumnIndex = 0;
+		auto nColumn = eseDbManager_->GetColumnCount();
+		for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex)
 		{
-			for (uint columnIndex = 0; columnIndex < eseDbManager_->GetColumnCount(); ++columnIndex)
+			auto columnValues = GetColumnValueString(columnIndex);
+			auto columnName = eseDbManager_->GetColumnName(columnIndex);
+			auto adName = parent_->GetAdNameFromColumnName(columnName);
+			if (0 == columnValues.size())
 			{
-				auto columnValues = GetColumnValueString(columnIndex);
-				wstring columnName(eseDbManager_->GetColumnName(columnIndex));
-				const wstring adName = parent_->GetAdNameFromColumnName(columnName);
-				detailListView_.AddItem(columnIndex, 0, columnName.c_str());
-				detailListView_.AddItem(columnIndex, 1, adName.c_str());
-				if (0 == columnValues.size())
+				if (!filterNoValue) 
 				{
-					detailListView_.AddItem(columnIndex, 2, L"<not set>");
-				}
-				else
-				{
-					detailListView_.AddItem(columnIndex, 2, columnValues.c_str());
-				}
-			}
-		}
-		else
-		{
-			int visibleColumnIndex = 0;
-			for (uint columnIndex = 0; columnIndex < eseDbManager_->GetColumnCount(); ++columnIndex)
-			{
-				wstring columnValues = GetColumnValueString(columnIndex);
-				if (0 != columnValues.size())
-				{
-					wstring columnName(eseDbManager_->GetColumnName(columnIndex));
-					const wstring adName = parent_->GetAdNameFromColumnName(columnName);
-					detailListView_.AddItem(visibleColumnIndex, 0, columnName.c_str());
-					detailListView_.AddItem(visibleColumnIndex, 1, adName.c_str());
-					detailListView_.AddItem(visibleColumnIndex, 2, columnValues.c_str());
+					AddRow(visibleColumnIndex, columnName, adName, L"<not set>");
 					++visibleColumnIndex;
 				}
+			}
+			else
+			{
+				AddRow(visibleColumnIndex, columnName, adName, columnValues);
+				++visibleColumnIndex;
 			}
 		}
 	}
@@ -123,6 +109,13 @@ void CDetailDialog::SetupListItems()
 	{
 		MessageBoxA(nullptr, e.what(), "Ditsnap", MB_ICONWARNING | MB_OK);
 	}
+}
+
+void CDetailDialog::AddRow(int index, wstring col1, wstring col2, wstring col3)
+{
+	detailListView_.AddItem(index, 0, col1.c_str());
+	detailListView_.AddItem(index, 1, col2.c_str());
+	detailListView_.AddItem(index, 2, col3.c_str());
 }
 
 wstring CDetailDialog::GetColumnValueString(uint columnIndex)

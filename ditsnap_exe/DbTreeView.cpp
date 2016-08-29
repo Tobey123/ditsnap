@@ -39,6 +39,7 @@ LRESULT CDbTreeView::OnTreeDoubleClick(LPNMHDR pnmh)
 			MessageBoxA(nullptr, e.what(), "Ditsnap", MB_ICONWARNING | MB_OK);
 		}
 	}
+
 	return 0;
 }
 
@@ -48,7 +49,7 @@ void CDbTreeView::LoadEseDbManager()
 	CImageList images;
 	images.CreateFromImage(IDB_BITMAP1, 16, 0,
 	                       RGB( 255, 0, 255 ), IMAGE_BITMAP, LR_CREATEDIBSECTION);
-	this->SetImageList(images);
+	SetImageList(images);
 	auto hRootItem = InsertItem(eseDbManager_->GetFilePath().c_str(), 0, 0, TVI_ROOT, TVI_LAST);
 	if (hRootItem != nullptr)
 	{
@@ -58,9 +59,9 @@ void CDbTreeView::LoadEseDbManager()
 	try
 	{
 		auto tableNames = eseDbManager_->GetTableNames();
-		for (uint i = 0; i < tableNames.size(); ++i)
+		for (auto& tableName : tableNames)
 		{
-			auto hItem = InsertItem(tableNames[i].c_str(), 1, 1, hRootItem, TVI_LAST);
+			auto hItem = InsertItem(tableName.c_str(), 1, 1, hRootItem, TVI_LAST);
 			if (hItem != nullptr)
 			{
 				SetItemData(hItem, reinterpret_cast<DWORD_PTR>(hItem));

@@ -40,6 +40,7 @@ private:
 	void SetupTopLabel();
 	void SetupListItems();
 	wstring GetColumnValueString(uint columnIndex);
+	void AddRow(int index, wstring col1, wstring col2, wstring col3);
 
 	DISALLOW_COPY_AND_ASSIGN(CDetailDialog);
 };

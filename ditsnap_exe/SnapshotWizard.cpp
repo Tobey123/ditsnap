@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "SnapshotWizard.h"
 #include "../VssCopy/VssCopy.h"
+#include "utility.h"
 
 using std::vector;
 using std::string;
 using std::wstring;
 using std::map;
 
-BOOL CSnapshotWizardPage1::OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
+BOOL SnapshotWizardPage1::OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
 {
 	sourceEdit_ = GetDlgItem(IDC_SOURCE_EDIT);
 	destinationEdit_ = GetDlgItem(IDC_DEST_EDIT);
@@ -24,7 +25,7 @@ BOOL CSnapshotWizardPage1::OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
 	return TRUE;
 }
 
-LRESULT CSnapshotWizardPage1::OnWizardNext()
+LRESULT SnapshotWizardPage1::OnWizardNext()
 {
 	CAutoPtr<wchar_t> sourcePath(new wchar_t[sourceEdit_.GetWindowTextLengthW() + 1]);
 	sourceEdit_.GetWindowTextW(sourcePath, sourceEdit_.GetWindowTextLengthW() + 1);
@@ -34,25 +35,25 @@ LRESULT CSnapshotWizardPage1::OnWizardNext()
 	wchar_t expandedDestinationPath[MAX_PATH];
 	if (0 == ::ExpandEnvironmentStrings(sourcePath, expandedSourcePath, MAX_PATH))
 	{
-		MessageBox(L"Bad source path format.", L"Error");
+		ShowMessageBox(L"Bad source path format.");
 		return -1;
 	}
 
 	if (0 == ::ExpandEnvironmentStrings(destinationPath, expandedDestinationPath, MAX_PATH))
 	{
-		MessageBox(L"Bad destination path format.", L"Error");
+		ShowMessageBox(L"Bad destination path format.");
 		return -1;
 	}
 
 	if (!ATLPath::FileExists(expandedSourcePath))
 	{
-		MessageBox(L"The source file does not exists.", L"Error");
+		ShowMessageBox(L"The source file does not exists.");
 		return -1;
 	}
 
 	if (ATLPath::FileExists(expandedDestinationPath))
 	{
-		MessageBox(L"The Destination file already exists.", L"Error");
+		ShowMessageBox(L"The Destination file already exists.");
 		return -1;
 	}
 
@@ -61,7 +62,7 @@ LRESULT CSnapshotWizardPage1::OnWizardNext()
 	{
 		CString errorMessage;
 		errorMessage.Format(L"%s : %d", L"Vss copy Failed.", hr);
-		MessageBox(errorMessage);
+		ShowMessageBox(errorMessage);
 		return -1;
 	}
 
@@ -69,7 +70,7 @@ LRESULT CSnapshotWizardPage1::OnWizardNext()
 	{
 		CString errorMessage;
 		errorMessage.Format(L"%s : %d", L"Database repair Failed. : ", GetLastError());
-		MessageBox(errorMessage);
+		ShowMessageBox(errorMessage);
 		return -1;
 	}
 
@@ -77,7 +78,7 @@ LRESULT CSnapshotWizardPage1::OnWizardNext()
 	return 0;
 }
 
-BOOL CSnapshotWizardPage1::InvokeEsentutilP(const wchar_t* targetDbPath)
+BOOL SnapshotWizardPage1::InvokeEsentutilP(const wchar_t* targetDbPath) const
 {
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
@@ -104,7 +105,7 @@ BOOL CSnapshotWizardPage1::InvokeEsentutilP(const wchar_t* targetDbPath)
 	return TRUE;
 }
 
-BOOL CSnapshotWizardPage2::OnSetActive()
+BOOL SnapshotWizardPage2::OnSetActive()
 {
 	SetWizardButtons(PSWIZB_BACK | PSWIZB_FINISH);
 	return TRUE;

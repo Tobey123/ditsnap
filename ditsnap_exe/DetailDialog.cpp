@@ -1,21 +1,22 @@
 #include "stdafx.h"
 #include "DetailDialog.h"
 #include "TableListView.h"
+#include "utility.h"
 
 using namespace EseDataAccess;
 
-CDetailDialog::CDetailDialog(EseDbManager* eseDbManager,
-                             CTableListView* parent,
+DetailDialog::DetailDialog(EseDbManager* eseDbManager,
+                             TableListView* parent,
                              int rowIndex)
 	: eseDbManager_(eseDbManager), parent_(parent), rowIndex_(rowIndex)
 {
 };
 
-CDetailDialog::~CDetailDialog()
+DetailDialog::~DetailDialog()
 {
 };
 
-LRESULT CDetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam)
+LRESULT DetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam)
 {
 	CenterWindow();
 	auto hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
@@ -43,7 +44,7 @@ LRESULT CDetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam)
 	}
 	catch (runtime_error& e)
 	{
-		MessageBoxA(nullptr, e.what(), "Ditsnap", MB_ICONWARNING | MB_OK);
+		ShowMessageBox(e.what());
 	}
 
 	SetupTopLabel();
@@ -51,17 +52,17 @@ LRESULT CDetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam)
 	return TRUE;
 }
 
-void CDetailDialog::OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl)
+void DetailDialog::OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl)
 {
 	DestroyWindow();
 }
 
-void CDetailDialog::OnShowAllCheckBoxToggled(UINT uNotifyCode, int nID, CWindow wndCtl)
+void DetailDialog::OnShowAllCheckBoxToggled(UINT uNotifyCode, int nID, CWindow wndCtl)
 {
 	SetupListItems();
 }
 
-void CDetailDialog::SetupTopLabel()
+void DetailDialog::SetupTopLabel() const
 {
 	auto RDN = parent_->GetColumnIdFromColumnName(L"ATTm589825");
 	auto rdnLabel = GetDlgItem(IDC_RDN);
@@ -73,16 +74,16 @@ void CDetailDialog::SetupTopLabel()
 	}
 	catch (runtime_error& e)
 	{
-		MessageBoxA(nullptr, e.what(), "Ditsnap", MB_ICONWARNING | MB_OK);
+		ShowMessageBox(e.what());
 	}
 }
 
-void CDetailDialog::SetupListItems()
+void DetailDialog::SetupListItems()
 {
 	try
 	{
 		detailListView_.DeleteAllItems();
-		bool filterNoValue = (bool)checkBox_.GetCheck();
+		bool filterNoValue = static_cast<bool>(checkBox_.GetCheck());
 		int visibleColumnIndex = 0;
 		auto nColumn = eseDbManager_->GetColumnCount();
 		for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex)
@@ -107,18 +108,18 @@ void CDetailDialog::SetupListItems()
 	}
 	catch (runtime_error& e)
 	{
-		MessageBoxA(nullptr, e.what(), "Ditsnap", MB_ICONWARNING | MB_OK);
+		ShowMessageBox(e.what());
 	}
 }
 
-void CDetailDialog::AddRow(int index, wstring col1, wstring col2, wstring col3)
+void DetailDialog::AddRow(int index, wstring col1, wstring col2, wstring col3)
 {
 	detailListView_.AddItem(index, 0, col1.c_str());
 	detailListView_.AddItem(index, 1, col2.c_str());
 	detailListView_.AddItem(index, 2, col3.c_str());
 }
 
-wstring CDetailDialog::GetColumnValueString(uint columnIndex)
+wstring DetailDialog::GetColumnValueString(uint columnIndex) const
 {
 	wstring columnValues;
 	int numberOfColumnValue = eseDbManager_->CountColumnValue(columnIndex);
@@ -135,7 +136,7 @@ wstring CDetailDialog::GetColumnValueString(uint columnIndex)
 	return columnValues;
 }
 
-LRESULT CDetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow wndCtl)
+LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow wndCtl)
 {
 	CString copyText;
 	for (int i = 0; i < detailListView_.GetItemCount(); ++i)
@@ -152,7 +153,7 @@ LRESULT CDetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow
 		}
 		else
 		{
-			s.Format(L" ( %s ): ", temp);
+			s.Format(L" ( %s ): ", static_cast<const wchar_t*>(temp));
 		}
 		copyText.Append(s);
 
@@ -163,7 +164,7 @@ LRESULT CDetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow
 
 	if (!OpenClipboard())
 	{
-		MessageBox(L"Cannot open clipboard.", L"Error");
+		ShowMessageBox(L"Cannot open clipboard.");
 		return -1;
 	}
 	int bufSize = (copyText.GetLength() + 1) * sizeof(wchar_t);
@@ -174,7 +175,7 @@ LRESULT CDetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow
 
 	if (!EmptyClipboard())
 	{
-		MessageBox(L"Cannot empty clipboard.", L"Error");
+		ShowMessageBox(L"Cannot empty clipboard.");
 		return -1;
 	}
 

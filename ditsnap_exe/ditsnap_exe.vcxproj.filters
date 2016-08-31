@@ -42,6 +42,9 @@
     <ClCompile Include="EseDbManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h">
@@ -75,6 +78,9 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="EseDbManager.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="utility.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,20 +10,20 @@ namespace EseDataAccess
 	class EseInstance;
 }
 
-class CDbTreeView : public CWindowImpl<CDbTreeView, CTreeViewCtrl>, IDbObserver
+class DbTreeView : public CWindowImpl<DbTreeView, CTreeViewCtrl>, IDbObserver
 {
 public:
 	DECLARE_WND_SUPERCLASS(nullptr, CTreeViewCtrl::GetWndClassName())
 
-	BEGIN_MSG_MAP_EX(CDbTreeView)
+	BEGIN_MSG_MAP_EX(DbTreeView)
 		REFLECTED_NOTIFY_CODE_HANDLER_EX(NM_DBLCLK, OnTreeDoubleClick)
 		DEFAULT_REFLECTION_HANDLER()
 	END_MSG_MAP()
 
-	CDbTreeView(EseDbManager* eseDbManager);
-	~CDbTreeView(void);
+	DbTreeView(EseDbManager* eseDbManager);
+	~DbTreeView(void);
 
-	LRESULT OnTreeDoubleClick(LPNMHDR pnmh);
+	LRESULT OnTreeDoubleClick(LPNMHDR pnmh) const;
 	virtual void LoadEseDbManager() override;
 
 private:

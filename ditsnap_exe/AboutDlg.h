@@ -1,11 +1,11 @@
 #pragma once
 
-class CAboutDlg : public CDialogImpl<CAboutDlg>
+class AboutDialog : public CDialogImpl<AboutDialog>
 {
 public:
 	enum { IDD = IDD_ABOUTBOX };
 
-	BEGIN_MSG_MAP_EX(CAboutDlg)
+	BEGIN_MSG_MAP_EX(AboutDialog)
 		MSG_WM_INITDIALOG(OnInitDialog)
 		COMMAND_ID_HANDLER_EX(IDOK, OnClose)
 		COMMAND_ID_HANDLER_EX(IDCANCEL, OnClose)

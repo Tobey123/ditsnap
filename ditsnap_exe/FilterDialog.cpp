@@ -2,12 +2,12 @@
 #include "FilterDialog.h"
 #include "resource.h"
 
-CFilterDialog::CFilterDialog(CTableListView* mainListView)
+FilterDialog::FilterDialog(TableListView* mainListView)
 	: mainListView_(mainListView)
 {
 };
 
-BOOL CFilterDialog::OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
+BOOL FilterDialog::OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
 {
 	CenterWindow();
 	auto hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
@@ -29,7 +29,7 @@ BOOL CFilterDialog::OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
 	return TRUE;
 }
 
-void CFilterDialog::OnOK(UINT uNotifyCode, int nID, CWindow wndCtl)
+void FilterDialog::OnOK(UINT uNotifyCode, int nID, CWindow wndCtl)
 {
 	int filterFlag = checkBoxClassSchema_.GetCheck();
 	filterFlag += checkBoxAttributeSchema_.GetCheck() << 1;
@@ -40,7 +40,7 @@ void CFilterDialog::OnOK(UINT uNotifyCode, int nID, CWindow wndCtl)
 	EndDialog(nID);
 }
 
-void CFilterDialog::OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl)
+void FilterDialog::OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl)
 {
 	EndDialog(nID);
 }

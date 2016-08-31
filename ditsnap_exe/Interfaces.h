@@ -1,6 +1,6 @@
 #pragma once
 
-class CMainFrame;
+class MainFrame;
 
 class ITableObserver
 {

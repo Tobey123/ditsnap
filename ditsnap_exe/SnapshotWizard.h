@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "resource.h"
 
-class CSnapshotWizardPage1 : public CPropertyPageImpl<CSnapshotWizardPage1>
+class SnapshotWizardPage1 : public CPropertyPageImpl<SnapshotWizardPage1>
 {
 public:
 	enum
@@ -10,14 +10,14 @@ public:
 		IDD = IDD_SCWIZARD1
 	};
 
-	explicit CSnapshotWizardPage1(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr))
-		: CPropertyPageImpl<CSnapshotWizardPage1>(title)
+	explicit SnapshotWizardPage1(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr))
+		: CPropertyPageImpl<SnapshotWizardPage1>(title)
 	{
 	}
 
-	BEGIN_MSG_MAP(CSnapshotWizardPage1)
+	BEGIN_MSG_MAP(SnapshotWizardPage1)
 		MSG_WM_INITDIALOG(OnInitDialog)
-		CHAIN_MSG_MAP(CPropertyPageImpl<CSnapshotWizardPage1>)
+		CHAIN_MSG_MAP(CPropertyPageImpl<SnapshotWizardPage1>)
 	END_MSG_MAP()
 
 	BOOL OnInitDialog(CWindow wndFocus, LPARAM lInitParam);
@@ -33,10 +33,10 @@ private:
 	CEdit destinationEdit_;
 	wchar_t* sharedStringPage1_;
 
-	BOOL InvokeEsentutilP(const wchar_t* targetDbPath);
+	BOOL InvokeEsentutilP(const wchar_t* targetDbPath) const;
 };
 
-class CSnapshotWizardPage2 : public CPropertyPageImpl<CSnapshotWizardPage2>
+class SnapshotWizardPage2 : public CPropertyPageImpl<SnapshotWizardPage2>
 {
 public:
 	enum
@@ -44,13 +44,13 @@ public:
 		IDD = IDD_SCWIZARD2
 	};
 
-	explicit CSnapshotWizardPage2(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr))
-		: CPropertyPageImpl<CSnapshotWizardPage2>(title)
+	explicit SnapshotWizardPage2(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr))
+		: CPropertyPageImpl<SnapshotWizardPage2>(title)
 	{
 	}
 
-	BEGIN_MSG_MAP(CSnapshotWizardPage2)
-		CHAIN_MSG_MAP(CPropertyPageImpl<CSnapshotWizardPage2>)
+	BEGIN_MSG_MAP(SnapshotWizardPage2)
+		CHAIN_MSG_MAP(CPropertyPageImpl<SnapshotWizardPage2>)
 	END_MSG_MAP()
 
 	BOOL OnSetActive();
@@ -80,13 +80,13 @@ public:
 	END_MSG_MAP()
 
 	//It is the client's responsibility that the return string should be deleted.
-	wchar_t* GetSnapshotFilePath()
+	wchar_t* GetSnapshotFilePath() const
 	{
 		return sharedString_;
 	}
 
 private:
-	CSnapshotWizardPage1 page1_;
-	CSnapshotWizardPage2 page2_;
+	SnapshotWizardPage1 page1_;
+	SnapshotWizardPage2 page2_;
 	wchar_t* sharedString_;
 };

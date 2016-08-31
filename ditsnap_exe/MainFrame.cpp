@@ -3,17 +3,18 @@
 #include "SnapshotWizard.h"
 #include "AboutDlg.h"
 #include "FilterDialog.h"
+#include "utility.h"
 
 using namespace EseDataAccess;
 
-CMainFrame::CMainFrame(EseDbManager* eseDbManager)
-	: tableListView_(CTableListView(eseDbManager)),
-	  dbTreeView_(CDbTreeView(eseDbManager)),
+MainFrame::MainFrame(EseDbManager* eseDbManager)
+	: m_bMsgHandled(0), tableListView_(TableListView(eseDbManager)),
+	  dbTreeView_(DbTreeView(eseDbManager)),
 	  eseDbManager_(eseDbManager)
 {
 }
 
-LRESULT CMainFrame::OnCreate(LPCREATESTRUCT lpcs)
+LRESULT MainFrame::OnCreate(LPCREATESTRUCT lpcs)
 {
 	CreateSimpleStatusBar();
 	UISetCheck(ID_VIEW_STATUS_BAR, true);
@@ -33,12 +34,12 @@ LRESULT CMainFrame::OnCreate(LPCREATESTRUCT lpcs)
 	return 0;
 }
 
-void CMainFrame::OnFileExit(UINT uCode, int nID, HWND hwndCtrl)
+void MainFrame::OnFileExit(UINT uCode, int nID, HWND hwndCtrl)
 {
 	PostMessage(WM_CLOSE);
 }
 
-void CMainFrame::OnFileOpen(UINT uCode, int nID, HWND hwndCtrl)
+void MainFrame::OnFileOpen(UINT uCode, int nID, HWND hwndCtrl) const
 {
 	auto ext = L"txt";
 	auto filter = L"dit file (*.dit)\0*.dit\0all file (*.*)\0*.*\0\0";
@@ -58,12 +59,12 @@ void CMainFrame::OnFileOpen(UINT uCode, int nID, HWND hwndCtrl)
 		}
 		catch (runtime_error& e)
 		{
-			MessageBoxA(nullptr, e.what(), "Ditsnap", MB_ICONWARNING | MB_OK);
+			ShowMessageBox(e.what());
 		}
 	}
 }
 
-void CMainFrame::OnViewStatusBar(UINT uCode, int nID, HWND hwndCtrl)
+void MainFrame::OnViewStatusBar(UINT uCode, int nID, HWND hwndCtrl)
 {
 	auto isVisible = !::IsWindowVisible(m_hWndStatusBar);
 	::ShowWindow(m_hWndStatusBar, isVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
@@ -71,13 +72,13 @@ void CMainFrame::OnViewStatusBar(UINT uCode, int nID, HWND hwndCtrl)
 	UpdateLayout();
 }
 
-void CMainFrame::OnAppAbout(UINT uCode, int nID, HWND hwndCtrl)
+void MainFrame::OnAppAbout(UINT uCode, int nID, HWND hwndCtrl)
 {
-	CAboutDlg dlg;
+	AboutDialog dlg;
 	dlg.DoModal();
 }
 
-void CMainFrame::OnFileSnapshot(UINT uCode, int nID, HWND hwndCtrl)
+void MainFrame::OnFileSnapshot(UINT uCode, int nID, HWND hwndCtrl) const
 {
 	CSnapshotWizard snapshotWizard;
 	if (snapshotWizard.DoModal() != IDOK)
@@ -89,8 +90,8 @@ void CMainFrame::OnFileSnapshot(UINT uCode, int nID, HWND hwndCtrl)
 	}
 }
 
-void CMainFrame::OnToolFilter(UINT uCode, int nID, HWND hwndCtrl)
+void MainFrame::OnToolFilter(UINT uCode, int nID, HWND hwndCtrl)
 {
-	CFilterDialog filterDialog(&tableListView_);
+	FilterDialog filterDialog(&tableListView_);
 	filterDialog.DoModal();
 }

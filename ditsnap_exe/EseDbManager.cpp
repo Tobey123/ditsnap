@@ -62,7 +62,7 @@ void EseDbManager::OpenFile(wstring path)
 	NotifyDbObservers();
 }
 
-wstring EseDbManager::GetFilePath()
+wstring EseDbManager::GetFilePath() const
 {
 	return filePath_;
 }
@@ -74,32 +74,32 @@ void EseDbManager::SetTable(wstring name)
 	NotifyTableObservers();
 }
 
-wstring EseDbManager::GetCurrentTableName()
+wstring EseDbManager::GetCurrentTableName() const
 {
 	return currentTableName_;
 }
 
-vector<wstring> EseDbManager::GetTableNames()
+vector<wstring> EseDbManager::GetTableNames() const
 {
 	return tableNames_;
 }
 
-void EseDbManager::MoveFirstRecord()
+void EseDbManager::MoveFirstRecord() const
 {
 	eseTable_->MoveFirstRecord();
 }
 
-BOOL EseDbManager::MoveNextRecord()
+BOOL EseDbManager::MoveNextRecord() const
 {
 	return eseTable_->MoveNextRecord();
 }
 
-void EseDbManager::Move(uint rowIndex)
+void EseDbManager::Move(uint rowIndex) const
 {
 	return eseTable_->Move(rowIndex);
 }
 
-wstring EseDbManager::RetrieveColumnDataAsString(uint columnIndex, uint itagSequence)
+wstring EseDbManager::RetrieveColumnDataAsString(uint columnIndex, uint itagSequence) const
 {
 	return eseTable_->RetrieveColumnDataAsString(columnIndex, itagSequence);
 }

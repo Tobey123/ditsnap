@@ -2,21 +2,22 @@
 #include "DbTreeView.h"
 #include "../EseDataAccess/EseDataAccess.h"
 #include "resource.h"
+#include "utility.h"
 
 using namespace EseDataAccess;
 
-CDbTreeView::CDbTreeView(EseDbManager* eseDbManager)
+DbTreeView::DbTreeView(EseDbManager* eseDbManager)
 	: eseDbManager_(eseDbManager)
 {
 	eseDbManager_->RegisterDbObserver(this);
 }
 
-CDbTreeView::~CDbTreeView(void)
+DbTreeView::~DbTreeView(void)
 {
 	eseDbManager_->RemoveDbObserver(this);
 }
 
-LRESULT CDbTreeView::OnTreeDoubleClick(LPNMHDR pnmh)
+LRESULT DbTreeView::OnTreeDoubleClick(LPNMHDR pnmh) const
 {
 	UINT uFlag;
 	CPoint pt = GetMessagePos();
@@ -36,14 +37,14 @@ LRESULT CDbTreeView::OnTreeDoubleClick(LPNMHDR pnmh)
 		}
 		catch (runtime_error& e)
 		{
-			MessageBoxA(nullptr, e.what(), "Ditsnap", MB_ICONWARNING | MB_OK);
+			ShowMessageBox(e.what());
 		}
 	}
 
 	return 0;
 }
 
-void CDbTreeView::LoadEseDbManager()
+void DbTreeView::LoadEseDbManager()
 {
 	DeleteAllItems();
 	CImageList images;
@@ -71,6 +72,6 @@ void CDbTreeView::LoadEseDbManager()
 	}
 	catch (runtime_error& e)
 	{
-		MessageBoxA(nullptr, e.what(), "Ditsnap", MB_ICONWARNING | MB_OK);
+		ShowMessageBox(e.what());
 	}
 }

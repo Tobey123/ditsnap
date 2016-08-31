@@ -9,7 +9,7 @@ int Run(LPTSTR /*lpstrCmdLine*/  = nullptr, int nCmdShow = SW_SHOWDEFAULT)
 	CMessageLoop theLoop;
 	_Module.AddMessageLoop(&theLoop);
 	auto eseDbManager = new EseDbManager();
-	auto wndMain = new CMainFrame(eseDbManager);
+	auto wndMain = new MainFrame(eseDbManager);
 	if (wndMain->CreateEx() == nullptr)
 	{
 		ATLTRACE(_T("Main window creation failed!\n"));

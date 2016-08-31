@@ -31,8 +31,8 @@ LRESULT CDetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam)
 	detailListView_.GetWindowRect(rcList);
 	auto nScrollWidth = GetSystemMetrics(SM_CXVSCROLL);
 	auto n3DEdge = GetSystemMetrics(SM_CXEDGE);
-	detailListView_.InsertColumn(0, L"Column name", LVCFMT_LEFT, 100, -1);
-	detailListView_.InsertColumn(1, L"AD Symbol name", LVCFMT_LEFT, 200, -1);
+	detailListView_.InsertColumn(0, L"Name", LVCFMT_LEFT, 100, -1);
+	detailListView_.InsertColumn(1, L"Description", LVCFMT_LEFT, 200, -1);
 	detailListView_.InsertColumn(2, L"Value", LVCFMT_LEFT,
 	                             rcList.Width() - 300 - nScrollWidth - n3DEdge * 2, -1);
 	checkBox_.SetCheck(1);
@@ -63,12 +63,12 @@ void CDetailDialog::OnShowAllCheckBoxToggled(UINT uNotifyCode, int nID, CWindow 
 
 void CDetailDialog::SetupTopLabel()
 {
-	auto ATT_RDN = parent_->GetColumnIdFromColumnName(L"ATTm589825");
+	auto RDN = parent_->GetColumnIdFromColumnName(L"ATTm589825");
 	auto rdnLabel = GetDlgItem(IDC_RDN);
 
 	try
 	{
-		auto rdn = eseDbManager_->RetrieveColumnDataAsString(ATT_RDN);
+		auto rdn = eseDbManager_->RetrieveColumnDataAsString(RDN);
 		rdnLabel.SetWindowTextW(rdn.c_str());
 	}
 	catch (runtime_error& e)

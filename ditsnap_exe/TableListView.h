@@ -45,10 +45,11 @@ private:
 	map<int, int> listItemIdToEseRowIndex_;
 	EseDbManager* eseDbManager_;
 
+	wstring RetrieveColumnData(wstring columnName);
 	void CleanupTable();
 	void CleanupDetailDialog();
-	void InsertColumnHelper(int nCol, wchar_t* ATT, int nWidth = 200);
-	void AddItemHelper(int nItem, int nSubItem, wchar_t* ATT);
+	void InsertColumnHelper(int nCol, wstring ATT, int nWidth = 200);
+	void AddItemHelper(int nItem, int nSubItem, wstring ATT);
 	bool MapColumnNameToColumnIndex(map<wstring, int>* columnMap);
 	void MapColumnNameToAdName(map<wstring, wstring>* pAdNameMap);
 };

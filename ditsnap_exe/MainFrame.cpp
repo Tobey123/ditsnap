@@ -40,8 +40,9 @@ void CMainFrame::OnFileExit(UINT uCode, int nID, HWND hwndCtrl)
 
 void CMainFrame::OnFileOpen(UINT uCode, int nID, HWND hwndCtrl)
 {
-	CFileDialog fileDialog(TRUE, _T("txt"), nullptr, OFN_HIDEREADONLY | OFN_CREATEPROMPT,
-	                           _T("dit file (*.dit)\0*.dit\0all file (*.*)\0*.*\0\0"));
+	auto ext = L"txt";
+	auto filter = L"dit file (*.dit)\0*.dit\0all file (*.*)\0*.*\0\0";
+	CFileDialog fileDialog(TRUE, ext, nullptr, OFN_HIDEREADONLY | OFN_CREATEPROMPT, filter);
 	wchar_t moduleName[MAX_PATH];
 	if (::GetModuleFileName(nullptr, moduleName, sizeof(moduleName)) > 0)
 	{

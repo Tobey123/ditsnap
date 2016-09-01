@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="headers">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="res">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
@@ -48,40 +44,40 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h">
-      <Filter>headers</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="DbTreeView.h">
-      <Filter>headers</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="DetailDialog.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="FilterDialog.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="SnapshotWizard.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="TableListView.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="MainFrame.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces.h">
-      <Filter>headers</Filter>
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="EseDbManager.h">
-      <Filter>headers</Filter>
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterDialog.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrame.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="SnapshotWizard.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="TableListView.h">
+      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="utility.h">
-      <Filter>headers</Filter>
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

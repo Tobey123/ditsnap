@@ -8,7 +8,7 @@ using namespace EseDataAccess;
 DetailDialog::DetailDialog(EseDbManager* eseDbManager,
                              TableListView* parent,
                              int rowIndex)
-	: eseDbManager_(eseDbManager), parent_(parent), rowIndex_(rowIndex)
+	: m_bMsgHandled(0), eseDbManager_(eseDbManager), parent_(parent), rowIndex_(rowIndex)
 {
 };
 
@@ -122,10 +122,10 @@ void DetailDialog::AddRow(int index, wstring col1, wstring col2, wstring col3)
 wstring DetailDialog::GetColumnValueString(uint columnIndex) const
 {
 	wstring columnValues;
-	int numberOfColumnValue = eseDbManager_->CountColumnValue(columnIndex);
-	for (int itagSequence = 1; itagSequence <= numberOfColumnValue; ++itagSequence)
+	auto numberOfColumnValue = eseDbManager_->CountColumnValue(columnIndex);
+	for (auto itagSequence = 1; itagSequence <= numberOfColumnValue; ++itagSequence)
 	{
-		wstring columnValue = eseDbManager_->RetrieveColumnDataAsString(columnIndex, itagSequence);
+		auto columnValue = eseDbManager_->RetrieveColumnDataAsString(columnIndex, itagSequence);
 		columnValues += columnValue;
 		if (numberOfColumnValue != itagSequence)
 		{
@@ -139,7 +139,7 @@ wstring DetailDialog::GetColumnValueString(uint columnIndex) const
 LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow wndCtl)
 {
 	CString copyText;
-	for (int i = 0; i < detailListView_.GetItemCount(); ++i)
+	for (auto i = 0; i < detailListView_.GetItemCount(); ++i)
 	{
 		CString s;
 		detailListView_.GetItemText(i, 0, s);

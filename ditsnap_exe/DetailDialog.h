@@ -33,7 +33,6 @@ private:
 	TableListView* parent_;
 	CListViewCtrl detailListView_;
 	CButton checkBox_;
-	EseDataAccess::EseTable* eseTable_;
 	int rowIndex_;
 
 	void SetupTopLabel() const;

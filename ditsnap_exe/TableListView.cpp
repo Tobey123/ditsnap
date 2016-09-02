@@ -65,12 +65,11 @@ void TableListView::LoadTable()
 		{
 			for (auto columnIndex = 0; columnIndex < nColumn; ++columnIndex)
 			{
-				// Support to display multi-valued column data.
 				wstring columnValues;
-				int numberOfColumnValue = eseDbManager_->CountColumnValue(columnIndex);
-				for (int itagSequence = 1; itagSequence <= numberOfColumnValue; ++itagSequence)
+				auto numberOfColumnValue = eseDbManager_->CountColumnValue(columnIndex);
+				for (auto itagSequence = 1; itagSequence <= numberOfColumnValue; ++itagSequence)
 				{
-					wstring columnValue = eseDbManager_->RetrieveColumnDataAsString(columnIndex, itagSequence);
+					auto columnValue = eseDbManager_->RetrieveColumnDataAsString(columnIndex, itagSequence);
 					columnValues += columnValue;
 					if (numberOfColumnValue != itagSequence)
 					{

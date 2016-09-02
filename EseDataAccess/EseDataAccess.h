@@ -85,8 +85,12 @@ namespace EseDataAccess
 		EseTable(const EseDatabase* const eseDatabase, const string& tableName);
 		~EseTable();
 		void Init();
+		void RetrieveColumnName(const JET_COLUMNLIST& columnList, vector<char>& columnName) const;
+		void RetrieveColumnType(const JET_COLUMNLIST& columnList, JET_COLTYP* colType) const;
+		void RetrieveColumnId(const JET_COLUMNLIST& columnList, JET_COLUMNID* columnId) const;
+		void RetrieveCodePage(const JET_COLUMNLIST& columnList, unsigned short* codePage) const;
 		void MoveFirstRecord() const;
-		BOOL MoveNextRecord() const;
+		bool MoveNextRecord() const;
 		void Move(uint rowIndex) const;
 		int CountColumnValue(uint columnIndex) const;
 		wstring RetrieveColumnDataAsString(uint columnIndex, uint itagSequence = 1);

@@ -21,7 +21,7 @@ namespace EseDataAccess
 	public:
 		~EseInstance();
 		static EseInstance* CreateInstance(uint pageSize = DEFAULT_ESE_PAGE_SIZE);
-		EseDatabase* OpenDatabase(const wstring dbPath);
+		EseDatabase* OpenDatabase(const wstring dbPath) const;
 
 		JET_SESID GetSessionId() const
 		{
@@ -56,7 +56,7 @@ namespace EseDataAccess
 		EseDatabase(const EseInstance* const parent, const string& dbPath);
 		~EseDatabase();
 		void Init();
-		EseTable* OpenTable(const wstring tableName);
+		EseTable* OpenTable(const wstring tableName) const;
 		vector<wstring> GetTableNames();
 
 		const EseInstance* GetEseInstance() const
@@ -85,9 +85,9 @@ namespace EseDataAccess
 		EseTable(const EseDatabase* const eseDatabase, const string& tableName);
 		~EseTable();
 		void Init();
-		void MoveFirstRecord();
-		BOOL MoveNextRecord();
-		void Move(uint rowIndex);
+		void MoveFirstRecord() const;
+		BOOL MoveNextRecord() const;
+		void Move(uint rowIndex) const;
 		int CountColumnValue(uint columnIndex) const;
 		wstring RetrieveColumnDataAsString(uint columnIndex, uint itagSequence = 1);
 		uint GetColumnCount() const;
@@ -100,7 +100,7 @@ namespace EseDataAccess
 		JET_TABLEID tableId_;
 		const string tableName_;
 		vector<EseColumn*> columns_;
-		EseColumn* RetrieveColumnDefinition(const JET_COLUMNLIST& columnList);
+		EseColumn* RetrieveColumnDefinition(const JET_COLUMNLIST& columnList) const;
 		vector<char> RetrieveColumnData(uint columnIndex, uint itagSequence);
 		DISALLOW_COPY_AND_ASSIGN(EseTable);
 	};

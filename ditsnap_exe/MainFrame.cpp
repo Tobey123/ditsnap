@@ -11,7 +11,7 @@ MainFrame::MainFrame(EseDbManager* eseDbManager)
 	: m_bMsgHandled(0), tableListView_(TableListView(eseDbManager)),
 	  dbTreeView_(DbTreeView(eseDbManager)),
 	  eseDbManager_(eseDbManager)
-{
+{	
 }
 
 LRESULT MainFrame::OnCreate(LPCREATESTRUCT lpcs)

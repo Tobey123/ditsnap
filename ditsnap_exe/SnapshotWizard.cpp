@@ -3,11 +3,6 @@
 #include "../VssCopy/VssCopy.h"
 #include "util.h"
 
-using std::vector;
-using std::string;
-using std::wstring;
-using std::map;
-
 BOOL SnapshotWizardPage1::OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
 {
 	sourceEdit_ = GetDlgItem(IDC_SOURCE_EDIT);

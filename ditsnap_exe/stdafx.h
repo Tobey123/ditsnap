@@ -13,17 +13,17 @@
 // WTL headers
 #define _WTL_NO_CSTRING
 #pragma warning( disable : 4996 )
-#include "wtl/atlapp.h"
+#include "atlapp.h"
 
 extern CAppModule _Module;
 
-#include "wtl/atlcrack.h"
-#include "wtl/atlmisc.h"
-#include "wtl/atlctrls.h"
-#include "wtl/atlframe.h"
-#include "wtl/atldlgs.h"
-#include "wtl/atlctrlx.h" 
-#include "wtl/atlsplit.h"
+#include "atlcrack.h"
+#include "atlmisc.h"
+#include "atlctrls.h"
+#include "atlframe.h"
+#include "atldlgs.h"
+#include "atlctrlx.h" 
+#include "atlsplit.h"
 
 #include <string>
 #include <vector>
@@ -41,9 +41,7 @@ using std::runtime_error;
 inline wstring to_w(const char* s)
 {
 	string str(s);
-	wstring w;
-	w.assign(str.begin(), str.end());
-	return w;
+	return wstring(str.begin(), str.end());
 }
 
 typedef unsigned int uint;

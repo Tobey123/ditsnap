@@ -2,7 +2,7 @@
 #include "DbTreeView.h"
 #include "../EseDataAccess/EseDataAccess.h"
 #include "resource.h"
-#include "utility.h"
+#include "util.h"
 
 using namespace EseDataAccess;
 

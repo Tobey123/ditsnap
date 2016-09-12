@@ -3,7 +3,7 @@
 #include "SnapshotWizard.h"
 #include "AboutDlg.h"
 #include "FilterDialog.h"
-#include "utility.h"
+#include "util.h"
 
 using namespace EseDataAccess;
 

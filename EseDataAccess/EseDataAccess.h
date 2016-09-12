@@ -3,14 +3,6 @@
 
 namespace EseDataAccess
 {
-	string GetJetErrorMessage(JET_ERR err);
-
-	inline void ThrowOnError(JET_ERR x)
-	{
-		if (x != JET_errSuccess)
-			throw runtime_error(GetJetErrorMessage(x));
-	}	
-
 	class EseInstance;
 	class EseDatabase;
 	class EseTable;
@@ -19,8 +11,8 @@ namespace EseDataAccess
 	class EseInstance
 	{
 	public:
+		explicit EseInstance(uint pageSize = DEFAULT_ESE_PAGE_SIZE);
 		~EseInstance();
-		static EseInstance* CreateInstance(uint pageSize = DEFAULT_ESE_PAGE_SIZE);
 		EseDatabase* OpenDatabase(const wstring dbPath) const;
 
 		JET_SESID GetSessionId() const
@@ -34,19 +26,11 @@ namespace EseDataAccess
 		}
 
 	private:
-		enum
-		{
-			DEFAULT_ESE_PAGE_SIZE = 8 * 1024
-		};
-
+		const static uint DEFAULT_ESE_PAGE_SIZE = 8 * 1024;
 		JET_INSTANCE jetInstance_;
 		JET_SESID sessionId_;
 		uint pageSize_;
-
-		EseInstance();
-		explicit EseInstance(uint pageSize);
-		void Init();
-
+		
 		DISALLOW_COPY_AND_ASSIGN(EseInstance);
 	};
 
@@ -55,19 +39,18 @@ namespace EseDataAccess
 	public:
 		EseDatabase(const EseInstance* const parent, const string& dbPath);
 		~EseDatabase();
-		void Init();
 		EseTable* OpenTable(const wstring tableName) const;
 		vector<wstring> GetTableNames();
 
 		const EseInstance* GetEseInstance() const
 		{
 			return eseInstance_;
-		};
+		}
 
 		JET_DBID GetDbId() const
 		{
 			return dbId_;
-		};
+		}
 
 	private:
 		const EseInstance* const eseInstance_;
@@ -84,11 +67,10 @@ namespace EseDataAccess
 	public:
 		EseTable(const EseDatabase* const eseDatabase, const string& tableName);
 		~EseTable();
-		void Init();
-		void RetrieveColumnName(const JET_COLUMNLIST& columnList, vector<char>& columnName) const;
-		void RetrieveColumnType(const JET_COLUMNLIST& columnList, JET_COLTYP* colType) const;
-		void RetrieveColumnId(const JET_COLUMNLIST& columnList, JET_COLUMNID* columnId) const;
-		void RetrieveCodePage(const JET_COLUMNLIST& columnList, unsigned short* codePage) const;
+		vector<char> RetrieveColumnName(const JET_COLUMNLIST& columnList) const;
+		JET_COLTYP RetrieveColumnType(const JET_COLUMNLIST& columnList) const;
+		JET_COLUMNID RetrieveColumnId(const JET_COLUMNLIST& columnList) const;
+		unsigned short RetrieveCodePage(const JET_COLUMNLIST& columnList) const;
 		void MoveFirstRecord() const;
 		bool MoveNextRecord() const;
 		void Move(uint rowIndex) const;
@@ -106,6 +88,7 @@ namespace EseDataAccess
 		vector<EseColumn*> columns_;
 		EseColumn* RetrieveColumnDefinition(const JET_COLUMNLIST& columnList) const;
 		vector<char> RetrieveColumnData(uint columnIndex, uint itagSequence);
+
 		DISALLOW_COPY_AND_ASSIGN(EseTable);
 	};
 
@@ -116,27 +99,27 @@ namespace EseDataAccess
 
 		~EseColumn()
 		{
-		};
+		}
 
 		uint GetId() const
 		{
 			return id_;
-		};
+		}
 
 		string GetName() const
 		{
 			return name_;
-		};
+		}
 
 		uint GetType() const
 		{
 			return type_;
-		};
+		}
 
 		bool IsUnicode() const
 		{
 			return isUnicode_;
-		};
+		}
 
 	private:
 		uint id_;

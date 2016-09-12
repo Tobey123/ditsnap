@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DetailDialog.h"
 #include "TableListView.h"
-#include "utility.h"
+#include "util.h"
 
 using namespace EseDataAccess;
 

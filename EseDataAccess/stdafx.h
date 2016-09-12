@@ -9,6 +9,7 @@
 #include <iomanip>
 #include "windows.h"
 #include "esent.h"
+#include "atlbase.h"
 
 using std::vector;
 using std::string;

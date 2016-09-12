@@ -70,12 +70,17 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EseDataAccess.cpp" />
+    <ClCompile Include="EseColumn.cpp" />
+    <ClCompile Include="EseInstance.cpp" />
+    <ClCompile Include="EseDatabase.cpp" />
+    <ClCompile Include="EseTable.cpp" />
+    <ClCompile Include="util.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EseDataAccess.h" />
     <ClInclude Include="esent.h" />
+    <ClInclude Include="util.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

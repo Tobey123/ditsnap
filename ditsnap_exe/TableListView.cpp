@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TableListView.h"
 #include "DetailDialog.h"
-#include "utility.h"
+#include "util.h"
 #include "../EseDataAccess/EseDataAccess.h"
 
 using namespace EseDataAccess;
@@ -23,7 +23,7 @@ TableListView::~TableListView()
 
 LRESULT TableListView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	LRESULT lRet = DefWindowProc();
+	auto lRet = DefWindowProc();
 	SetExtendedListViewStyle(LVS_EX_INFOTIP | LVS_EX_FULLROWSELECT);
 	return lRet;
 }
@@ -53,17 +53,17 @@ void TableListView::LoadTable()
 	try
 	{
 		auto nColumn = eseDbManager_->GetColumnCount();
-		for (auto columnIndex = 0; columnIndex < nColumn; ++columnIndex)
+		for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex)
 		{
 			auto columnName = eseDbManager_->GetColumnName(columnIndex);
 			InsertColumn(columnIndex, columnName.c_str(), LVCFMT_LEFT, nWidth);
 		}
 
-		int rowIndex = 0;
+		auto rowIndex = 0;
 		eseDbManager_->MoveFirstRecord();
 		do
 		{
-			for (auto columnIndex = 0; columnIndex < nColumn; ++columnIndex)
+			for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex)
 			{
 				wstring columnValues;
 				auto numberOfColumnValue = eseDbManager_->CountColumnValue(columnIndex);
@@ -105,11 +105,11 @@ void TableListView::LoadDatatable()
 	{
 		for (auto i = 0; i < listHeaderColumnNames.size(); ++i)
 		{
-			int colWidth = i == 0 ? 200 : 70;
+			auto colWidth = i == 0 ? 200 : 70;
 			InsertColumnHelper(i, listHeaderColumnNames[i], colWidth);
 		}
 
-		int rowIndex = 0;
+		auto rowIndex = 0;
 		eseDbManager_->MoveFirstRecord();
 		do
 		{
@@ -148,7 +148,7 @@ void TableListView::FilterTable(int filterFlag)
 		eseDbManager_->MoveFirstRecord();
 		do
 		{
-			wstring objectName = RetrieveColumnData(L"ATTm589825");
+			auto objectName = RetrieveColumnData(L"ATTm589825");
 			if (classSchemaDnt.empty() && L"Class-Schema" == objectName)
 			{
 				classSchemaDnt = RetrieveColumnData(L"DNT_col");
@@ -179,13 +179,13 @@ void TableListView::FilterTable(int filterFlag)
 
 	try
 	{
-		int eseRowIndex = -1;
-		int rowIndex = 0;
+		auto eseRowIndex = -1;
+		auto rowIndex = 0;
 		eseDbManager_->MoveFirstRecord();
 		do
 		{
 			++eseRowIndex;
-			wstring objectCategory = RetrieveColumnData(L"ATTb590606");
+			auto objectCategory = RetrieveColumnData(L"ATTb590606");
 			if (!(filterFlag & CLASSSCHEMA) && classSchemaDnt == objectCategory) continue;
 			if (!(filterFlag & ATTRIBUTESCHEMA) && attributeSchemaDnt == objectCategory) continue;
 			if (!(filterFlag & SUBSCHEMA) && subSchemaDnt == objectCategory) continue;
@@ -198,7 +198,7 @@ void TableListView::FilterTable(int filterFlag)
 			)
 				continue;
 
-			for (int i = 0; i < listHeaderColumnNames.size(); ++i)
+			for (auto i = 0; i < listHeaderColumnNames.size(); ++i)
 			{
 				auto s = RetrieveColumnData(listHeaderColumnNames[i]);
 				AddItem(rowIndex, i, s.c_str());
@@ -248,8 +248,8 @@ void TableListView::LoadEseDbManager()
 void TableListView::CleanupTable()
 {
 	DeleteAllItems();
-	int columnCount = GetHeader().GetItemCount();
-	for (int i = 0; i < columnCount; ++i)
+	auto columnCount = GetHeader().GetItemCount();
+	for (auto i = 0; i < columnCount; ++i)
 	{
 		DeleteColumn(0);
 	}
@@ -285,7 +285,7 @@ void TableListView::InsertColumnHelper(int nCol, wstring columnName, int nWidth)
 
 void TableListView::AddItemHelper(int nItem, int nSubItem, wstring columnName)
 {
-	wstring s = RetrieveColumnData(columnName);
+	auto s = RetrieveColumnData(columnName);
 	AddItem(nItem, nSubItem, s.c_str());
 }
 
@@ -300,7 +300,7 @@ bool TableListView::MapColumnNameToColumnIndex(map<wstring, int>* pColumnMap) co
 	{
 		for (uint columnIndex = 0; columnIndex < eseDbManager_->GetColumnCount(); ++columnIndex)
 		{
-			wstring columnName(eseDbManager_->GetColumnName(columnIndex));
+			auto columnName(eseDbManager_->GetColumnName(columnIndex));
 			pColumnMap->insert(pair<wstring, int>(wstring(columnName), columnIndex));
 		}
 	}

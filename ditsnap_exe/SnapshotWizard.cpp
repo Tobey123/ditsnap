@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SnapshotWizard.h"
 #include "../VssCopy/VssCopy.h"
-#include "utility.h"
+#include "util.h"
 
 using std::vector;
 using std::string;

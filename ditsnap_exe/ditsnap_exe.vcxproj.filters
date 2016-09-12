@@ -1,84 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="res">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DbTreeView.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="DetailDialog.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="ditsnap.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="FilterDialog.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="SnapshotWizard.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="TableListView.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="MainFrame.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="EseDbManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="utility.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
+    <ClCompile Include="DbTreeView.cpp" />
+    <ClCompile Include="DetailDialog.cpp" />
+    <ClCompile Include="ditsnap.cpp" />
+    <ClCompile Include="EseDbManager.cpp" />
+    <ClCompile Include="FilterDialog.cpp" />
+    <ClCompile Include="MainFrame.cpp" />
+    <ClCompile Include="SnapshotWizard.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="TableListView.cpp" />
+    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AboutDlg.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="DbTreeView.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="DetailDialog.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="EseDbManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="FilterDialog.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="Interfaces.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="MainFrame.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="SnapshotWizard.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="TableListView.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="utility.h">
-      <Filter>src</Filter>
-    </ClInclude>
+    <ClInclude Include="AboutDlg.h" />
+    <ClInclude Include="DbTreeView.h" />
+    <ClInclude Include="DetailDialog.h" />
+    <ClInclude Include="EseDbManager.h" />
+    <ClInclude Include="FilterDialog.h" />
+    <ClInclude Include="Interfaces.h" />
+    <ClInclude Include="MainFrame.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="SnapshotWizard.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TableListView.h" />
+    <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\databaseAndTable.bmp">
@@ -98,5 +50,8 @@
     <ResourceCompile Include="ditsnap.rc">
       <Filter>res</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

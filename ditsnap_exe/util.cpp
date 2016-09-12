@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "utility.h"
+#include "util.h"
 
 void ShowMessageBox(const char* message)
 {

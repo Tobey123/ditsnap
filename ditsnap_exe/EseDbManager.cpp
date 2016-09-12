@@ -56,7 +56,7 @@ void EseDbManager::OpenFile(wstring path)
 {
 	filePath_ = path;
 	CleanupEse();
-	eseInstance_ = EseInstance::CreateInstance();
+	eseInstance_ = new EseInstance();
 	eseDatabase_ = eseInstance_->OpenDatabase(path);
 	tableNames_ = eseDatabase_->GetTableNames();
 	NotifyDbObservers();

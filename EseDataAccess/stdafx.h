@@ -11,6 +11,7 @@
 #include "esent.h"
 #include "atlbase.h"
 
+
 using std::vector;
 using std::string;
 using std::wstring;

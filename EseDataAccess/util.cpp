@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "EseDataAccess.h"
+#include <spdlog/details/spdlog_impl.h>
 
 namespace EseDataAccess
 {
@@ -23,5 +24,20 @@ namespace EseDataAccess
 		retInfo.cbStruct = sizeof(JET_RETINFO);
 		retInfo.itagSequence = itagSequence;
 		return retInfo;
+	}
+
+	string w_to_s(wstring w)
+	{
+		return string(CW2A(w.c_str()));
+	}	
+
+	std::shared_ptr<spdlog::logger> GetLogger(string loggerName)
+	{
+		wchar_t fileName[MAX_PATH];
+		GetModuleFileName(nullptr, fileName, MAX_PATH);
+		auto pos = wstring(fileName).find_last_of(L"\\/");
+		auto dirName = wstring(fileName).substr(0, pos);
+		auto logFile = dirName + L"\\ditsnap.log";
+		return spdlog::basic_logger_mt(loggerName, w_to_s(logFile));
 	}
 }

@@ -62,4 +62,14 @@ namespace EseDataAccess
 		JetCloseTable(sessionId_, tableList.tableid);
 		return tableNames;
 	}
+
+	const EseInstance* EseDatabase::GetEseInstance() const
+	{
+		return eseInstance_;
+	}
+
+	JET_DBID EseDatabase::GetDbId() const
+	{
+		return dbId_;
+	}
 }

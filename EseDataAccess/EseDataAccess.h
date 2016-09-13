@@ -14,23 +14,14 @@ namespace EseDataAccess
 		explicit EseInstance(uint pageSize = DEFAULT_ESE_PAGE_SIZE);
 		~EseInstance();
 		EseDatabase* OpenDatabase(const wstring dbPath) const;
-
-		JET_SESID GetSessionId() const
-		{
-			return sessionId_;
-		}
-
-		JET_INSTANCE GetJetInstance() const
-		{
-			return jetInstance_;
-		}
+		JET_SESID GetSessionId() const;
+		JET_INSTANCE GetJetInstance() const;
 
 	private:
 		const static uint DEFAULT_ESE_PAGE_SIZE = 8 * 1024;
-		JET_INSTANCE jetInstance_;
-		JET_SESID sessionId_;
-		uint pageSize_;
-		
+		class Impl;
+		unique_ptr<Impl> pimpl;
+
 		DISALLOW_COPY_AND_ASSIGN(EseInstance);
 	};
 
@@ -41,16 +32,8 @@ namespace EseDataAccess
 		~EseDatabase();
 		EseTable* OpenTable(const wstring tableName) const;
 		vector<wstring> GetTableNames();
-
-		const EseInstance* GetEseInstance() const
-		{
-			return eseInstance_;
-		}
-
-		JET_DBID GetDbId() const
-		{
-			return dbId_;
-		}
+		const EseInstance* GetEseInstance() const;
+		JET_DBID GetDbId() const;
 
 	private:
 		const EseInstance* const eseInstance_;
@@ -96,30 +79,11 @@ namespace EseDataAccess
 	{
 	public:
 		EseColumn(uint id, const string& name, uint type, bool isUnicode);
-
-		~EseColumn()
-		{
-		}
-
-		uint GetId() const
-		{
-			return id_;
-		}
-
-		string GetName() const
-		{
-			return name_;
-		}
-
-		uint GetType() const
-		{
-			return type_;
-		}
-
-		bool IsUnicode() const
-		{
-			return isUnicode_;
-		}
+		~EseColumn();
+		uint GetId() const;
+		string GetName() const;
+		uint GetType() const;
+		bool IsUnicode() const;
 
 	private:
 		uint id_;

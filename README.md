@@ -8,12 +8,11 @@ EseDataAccess static library can be used for other ESE inspection applications. 
 class EseTable
 {
 	public:
-		EseTable(const EseDatabase* const eseDatabase, const string& tableName);
+		EseTable(const EseDatabase* const eseDatabase, string tableName);
 		~EseTable();
-		void Init();
-		void MoveFirstRecord();
-		BOOL MoveNextRecord();
-		void Move(uint rowIndex);
+		void MoveFirstRecord() const;
+		bool MoveNextRecord() const;
+		void Move(uint rowIndex) const;
 		int CountColumnValue(uint columnIndex) const;
 		wstring RetrieveColumnDataAsString(uint columnIndex, uint itagSequence = 1);
 		uint GetColumnCount() const;

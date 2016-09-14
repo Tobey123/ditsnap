@@ -3,9 +3,25 @@
 
 namespace EseDataAccess
 {
-	EseColumn::EseColumn(uint id, const string& name, uint type, bool isUnicode) :
-		id_(id), name_(name), type_(type), isUnicode_(isUnicode)
+	class EseColumn::Impl
 	{
+	public:
+		Impl(){}
+		uint id_;
+		string name_;
+		uint type_;
+		bool isUnicode_;
+
+		DISALLOW_COPY_AND_ASSIGN(EseColumn::Impl);
+	};
+
+
+	EseColumn::EseColumn(uint id, const string& name, uint type, bool isUnicode) : pimpl(new Impl())		
+	{
+		pimpl->id_ = id; 
+		pimpl->name_ = name; 
+		pimpl->type_ = type; 
+		pimpl->isUnicode_ = isUnicode;
 	}
 
 	EseColumn::~EseColumn()
@@ -14,21 +30,21 @@ namespace EseDataAccess
 
 	uint EseColumn::GetId() const
 	{
-		return id_;
+		return pimpl->id_;
 	}
 
 	string EseColumn::GetName() const
 	{
-		return name_;
+		return pimpl->name_;
 	}
 
 	uint EseColumn::GetType() const
 	{
-		return type_;
+		return pimpl->type_;
 	}
 
 	bool EseColumn::IsUnicode() const
 	{
-		return isUnicode_;
+		return pimpl->isUnicode_;
 	}
 } 

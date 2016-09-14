@@ -4,22 +4,40 @@
 
 namespace EseDataAccess
 {
-	EseDatabase::EseDatabase(const EseInstance* const eseInstance, const string& dbPath)
-		: eseInstance_(eseInstance), sessionId_(eseInstance->GetSessionId()),
-		dbId_(0), dbPath_(dbPath), tableCount_(-1)
+	class EseDatabase::Impl
 	{
-		ThrowOnError(JetAttachDatabase(sessionId_, dbPath_.c_str(), JET_bitDbReadOnly));
-		ThrowOnError(JetOpenDatabase(sessionId_, dbPath_.c_str(), nullptr, &dbId_, JET_bitDbReadOnly));
+	public:
+		Impl(): eseInstance_(nullptr), sessionId_(0){}
+		const EseInstance* eseInstance_;
+		JET_SESID sessionId_;
+		JET_DBID dbId_;
+		string dbPath_;
+		int tableCount_;
+
+		DISALLOW_COPY_AND_ASSIGN(EseDatabase::Impl);
+	};
+
+
+	EseDatabase::EseDatabase(const EseInstance* eseInstance, const string dbPath) 
+		:pimpl(new Impl())
+	{
+		pimpl->eseInstance_ = eseInstance;
+		pimpl->sessionId_ = eseInstance->GetSessionId();
+		pimpl->dbId_ = 0;
+		pimpl->dbPath_ = dbPath;
+		pimpl->tableCount_ = -1;
+		ThrowOnError(JetAttachDatabase(pimpl->sessionId_, pimpl->dbPath_.c_str(), JET_bitDbReadOnly));
+		ThrowOnError(JetOpenDatabase(pimpl->sessionId_, pimpl->dbPath_.c_str(), nullptr, &pimpl->dbId_, JET_bitDbReadOnly));
 	}
 
 	EseDatabase::~EseDatabase(void)
 	{
-		if (dbId_ != 0)
+		if (pimpl->dbId_ != 0)
 		{
-			JetCloseDatabase(sessionId_, dbId_, 0);
+			JetCloseDatabase(pimpl->sessionId_, pimpl->dbId_, 0);
 		}
 
-		JetDetachDatabase(sessionId_, dbPath_.c_str());
+		JetDetachDatabase(pimpl->sessionId_, pimpl->dbPath_.c_str());
 	}
 
 	EseTable* EseDatabase::OpenTable(const wstring tableName) const
@@ -27,13 +45,13 @@ namespace EseDataAccess
 		return new EseTable(this, string(CW2A(tableName.c_str())));
 	}
 
-	vector<wstring> EseDatabase::GetTableNames()
+	vector<wstring> EseDatabase::GetTableNames() const
 	{
 		//Get a temporary table which contains all table names.
 		JET_OBJECTLIST tableList{0};
-		ThrowOnError(JetGetObjectInfo(sessionId_, dbId_, JET_objtypTable,
+		ThrowOnError(JetGetObjectInfo(pimpl->sessionId_, pimpl->dbId_, JET_objtypTable,
 			nullptr, nullptr, &tableList, sizeof(JET_OBJECTLIST), JET_ObjInfoList));
-		tableCount_ = tableList.cRecord;
+		pimpl->tableCount_ = tableList.cRecord;
 		vector<wstring> tableNames;
 		for (auto i = 0; i < tableList.cRecord; ++i)
 		{
@@ -42,34 +60,34 @@ namespace EseDataAccess
 			vector<char> tableNameBuffer(JET_cbNameMost + 1);
 			try
 			{
-				ThrowOnError(JetRetrieveColumn(sessionId_, tableList.tableid, tableList.columnidobjectname, 
+				ThrowOnError(JetRetrieveColumn(pimpl->sessionId_, tableList.tableid, tableList.columnidobjectname, 
 					tableNameBuffer.data(), JET_cbNameMost, &actualSize, 0, &retInfo));
 				tableNameBuffer[actualSize] = NULL;
 				auto tableName = wstring(tableNameBuffer.begin(), tableNameBuffer.end());
 				tableNames.push_back(tableName);
-				auto r = JetMove(sessionId_, tableList.tableid, JET_MoveNext, 0);
+				auto r = JetMove(pimpl->sessionId_, tableList.tableid, JET_MoveNext, 0);
 				if (r == JET_errNoCurrentRecord)
 					break;
 				ThrowOnError(r);
 			}
 			catch (runtime_error&)
 			{
-				JetCloseTable(sessionId_, tableList.tableid);
+				JetCloseTable(pimpl->sessionId_, tableList.tableid);
 				throw;
 			}
 		}
 
-		JetCloseTable(sessionId_, tableList.tableid);
+		JetCloseTable(pimpl->sessionId_, tableList.tableid);
 		return tableNames;
 	}
 
 	const EseInstance* EseDatabase::GetEseInstance() const
 	{
-		return eseInstance_;
+		return pimpl->eseInstance_;
 	}
 
 	JET_DBID EseDatabase::GetDbId() const
 	{
-		return dbId_;
+		return pimpl->dbId_;
 	}
 }

@@ -19,8 +19,8 @@ class EseTable
 		wstring GetColumnName(uint columnIndex) const;
 }
 ```
-Prebuild executable is available here.
-[Download ditsnap.exe](https://github.com/yosqueoy/ditsnap/blob/master/x64/Release/ditsnap.exe?raw=true)
+The executable is available here.
+[Download ditsnap.exe](https://github.com/yosqueoy/ditsnap/releases)
 
 ##Main Window
 <img src="images/screenshot1.png" height="400">

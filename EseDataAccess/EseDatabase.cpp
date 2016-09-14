@@ -13,40 +13,47 @@ namespace EseDataAccess
 		JET_DBID dbId_;
 		string dbPath_;
 		int tableCount_;
+		std::shared_ptr<spdlog::logger> log_;
 
 		DISALLOW_COPY_AND_ASSIGN(EseDatabase::Impl);
 	};
 
 
-	EseDatabase::EseDatabase(const EseInstance* eseInstance, const string dbPath) 
+	EseDatabase::EseDatabase(const EseInstance* const eseInstance, const string dbPath) 
 		:pimpl(new Impl())
-	{
+	{		
 		pimpl->eseInstance_ = eseInstance;
 		pimpl->sessionId_ = eseInstance->GetSessionId();
 		pimpl->dbId_ = 0;
 		pimpl->dbPath_ = dbPath;
 		pimpl->tableCount_ = -1;
+		pimpl->log_ = GetLogger();
+		pimpl->log_->info("Opening ESE Database {}...", dbPath);
 		ThrowOnError(JetAttachDatabase(pimpl->sessionId_, pimpl->dbPath_.c_str(), JET_bitDbReadOnly));
 		ThrowOnError(JetOpenDatabase(pimpl->sessionId_, pimpl->dbPath_.c_str(), nullptr, &pimpl->dbId_, JET_bitDbReadOnly));
+		pimpl->log_->info("Opened ESE Database {}.", dbPath);
 	}
 
 	EseDatabase::~EseDatabase(void)
 	{
+		pimpl->log_->info("Closing ESE Database {}...", pimpl->dbPath_);
 		if (pimpl->dbId_ != 0)
 		{
 			JetCloseDatabase(pimpl->sessionId_, pimpl->dbId_, 0);
 		}
 
 		JetDetachDatabase(pimpl->sessionId_, pimpl->dbPath_.c_str());
+		pimpl->log_->info("Closed ESE Database {}.", pimpl->dbPath_);
 	}
 
-	EseTable* EseDatabase::OpenTable(const wstring tableName) const
+	EseTable* EseDatabase::OpenTable(wstring tableName) const
 	{
 		return new EseTable(this, string(CW2A(tableName.c_str())));
 	}
 
 	vector<wstring> EseDatabase::GetTableNames() const
 	{
+		pimpl->log_->info("Listing tables...");
 		//Get a temporary table which contains all table names.
 		JET_OBJECTLIST tableList{0};
 		ThrowOnError(JetGetObjectInfo(pimpl->sessionId_, pimpl->dbId_, JET_objtypTable,
@@ -78,6 +85,7 @@ namespace EseDataAccess
 		}
 
 		JetCloseTable(pimpl->sessionId_, tableList.tableid);
+		pimpl->log_->info("Successfully listed tables.");
 		return tableNames;
 	}
 

@@ -16,7 +16,7 @@ namespace EseDataAccess
 	};
 
 
-	EseColumn::EseColumn(uint id, const string& name, uint type, bool isUnicode) : pimpl(new Impl())		
+	EseColumn::EseColumn(uint id, string name, uint type, bool isUnicode) : pimpl(new Impl())		
 	{
 		pimpl->id_ = id; 
 		pimpl->name_ = name; 

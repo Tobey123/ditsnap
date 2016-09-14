@@ -26,6 +26,12 @@ namespace EseDataAccess
 		return retInfo;
 	}
 
+	void ThrowOnError(JET_ERR x)
+	{
+		if (x != JET_errSuccess)
+			throw runtime_error(GetJetErrorMessage(x));
+	}
+
 	string w_to_s(wstring w)
 	{
 		return string(CW2A(w.c_str()));
@@ -33,11 +39,20 @@ namespace EseDataAccess
 
 	std::shared_ptr<spdlog::logger> GetLogger(string loggerName)
 	{
+		auto logger = spdlog::get(loggerName);
+		if (logger != nullptr)
+		{
+			return logger;
+		}
+
+#ifdef _DEBUG
+		spdlog::set_level(spdlog::level::debug);
+#endif
 		wchar_t fileName[MAX_PATH];
 		GetModuleFileName(nullptr, fileName, MAX_PATH);
 		auto pos = wstring(fileName).find_last_of(L"\\/");
 		auto dirName = wstring(fileName).substr(0, pos);
 		auto logFile = dirName + L"\\ditsnap.log";
-		return spdlog::basic_logger_mt(loggerName, w_to_s(logFile));
+		return spdlog::basic_logger_mt(loggerName, logFile);
 	}
 }

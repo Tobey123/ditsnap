@@ -21,7 +21,7 @@ namespace EseDataAccess
 	EseInstance::EseInstance(uint pageSize) : pimpl(new Impl())
 	{
 		pimpl->pageSize_ = pageSize;
-		pimpl->log_ = GetLogger("EseInstance");
+		pimpl->log_ = GetLogger();
 		pimpl->log_->info("Starting ESE instance with page size {}...", pageSize);
 		auto instanceName = "ditsnap";
 		ThrowOnError(JetSetSystemParameter(&pimpl->jetInstance_, 0, JET_paramDatabasePageSize, pimpl->pageSize_, nullptr));
@@ -46,7 +46,7 @@ namespace EseDataAccess
 		pimpl->log_->info("Stopped ESE instance.");
 	}
 
-	EseDatabase* EseInstance::OpenDatabase(const wstring dbPath) const
+	EseDatabase* EseInstance::OpenDatabase(wstring dbPath) const
 	{
 		pimpl->log_->info("Opening database {}...", w_to_s(dbPath));
 		return new EseDatabase(this, string(CW2A(dbPath.c_str())));

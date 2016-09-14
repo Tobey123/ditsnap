@@ -13,7 +13,7 @@ namespace EseDataAccess
 	public:
 		explicit EseInstance(uint pageSize = DEFAULT_ESE_PAGE_SIZE);
 		~EseInstance();
-		EseDatabase* OpenDatabase(const wstring dbPath) const;
+		EseDatabase* OpenDatabase(wstring dbPath) const;
 		JET_SESID GetSessionId() const;
 		JET_INSTANCE GetJetInstance() const;
 		const static uint DEFAULT_ESE_PAGE_SIZE = 8 * 1024;
@@ -28,9 +28,9 @@ namespace EseDataAccess
 	class EseDatabase
 	{
 	public:
-		EseDatabase(const EseInstance* const parent, const string dbPath);
+		EseDatabase(const EseInstance* const parent, string dbPath);
 		~EseDatabase();
-		EseTable* OpenTable(const wstring tableName) const;
+		EseTable* OpenTable(wstring tableName) const;
 		vector<wstring> GetTableNames() const;
 		const EseInstance* GetEseInstance() const;
 		JET_DBID GetDbId() const;
@@ -45,7 +45,7 @@ namespace EseDataAccess
 	class EseTable
 	{
 	public:
-		EseTable(const EseDatabase* eseDatabase, string tableName);
+		EseTable(const EseDatabase* const eseDatabase, string tableName);
 		~EseTable();
 		void MoveFirstRecord() const;
 		bool MoveNextRecord() const;
@@ -65,7 +65,7 @@ namespace EseDataAccess
 	class EseColumn
 	{
 	public:
-		EseColumn(uint id, const string& name, uint type, bool isUnicode);
+		EseColumn(uint id, string name, uint type, bool isUnicode);
 		~EseColumn();
 		uint GetId() const;
 		string GetName() const;

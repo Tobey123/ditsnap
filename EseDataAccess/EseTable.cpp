@@ -20,6 +20,7 @@ namespace EseDataAccess
 		unsigned short RetrieveCodePage(const JET_COLUMNLIST& columnList) const;
 		EseColumn* RetrieveColumnDefinition(const JET_COLUMNLIST& columnList) const;
 		vector<char> RetrieveColumnData(uint columnIndex, uint itagSequence);
+		std::shared_ptr<spdlog::logger> log_;
 
 		DISALLOW_COPY_AND_ASSIGN(EseTable::Impl);
 	};
@@ -32,7 +33,8 @@ namespace EseDataAccess
 		pimpl->sessionId_ = eseDatabase->GetEseInstance()->GetSessionId();
 		pimpl->dbId_ = eseDatabase->GetDbId(); 
 		pimpl->tableName_ = tableName;
-
+		pimpl->log_ = GetLogger();
+		pimpl->log_->info("Initializing ESE Table {} in DB ID {}...", tableName, eseDatabase->GetDbId());
 		JET_COLUMNLIST columnList{0};
 		try
 		{
@@ -57,6 +59,7 @@ namespace EseDataAccess
 
 			// close the temporary table 
 			JetCloseTable(pimpl->sessionId_, columnList.tableid);
+			pimpl->log_->info("Successfully initialized ESE Table {}.", tableName);
 		}
 		catch (runtime_error&)
 		{
@@ -70,6 +73,7 @@ namespace EseDataAccess
 
 	EseTable::~EseTable(void)
 	{
+		pimpl->log_->info("Closing ESE table {}...", pimpl->tableName_);
 		for (auto& column : pimpl->columns_)
 		{
 			delete column;
@@ -79,6 +83,7 @@ namespace EseDataAccess
 		{
 			JetCloseTable(pimpl->sessionId_, pimpl->tableId_);
 		}
+		pimpl->log_->info("Closed ESE table {}.", pimpl->tableName_);
 	}
 	
 	vector<char> EseTable::Impl::RetrieveColumnName(const JET_COLUMNLIST& columnList) const
@@ -136,11 +141,13 @@ namespace EseDataAccess
 
 	void EseTable::MoveFirstRecord() const
 	{
+		pimpl->log_->info("Moving to the first record in table {}...", pimpl->tableName_);
 		ThrowOnError(JetMove(pimpl->sessionId_, pimpl->tableId_, JET_MoveFirst, 0));
 	}
 
 	bool EseTable::MoveNextRecord() const
 	{
+		pimpl->log_->debug("Moving to the next record in table {}...", pimpl->tableName_);
 		auto error = JetMove(pimpl->sessionId_, pimpl->tableId_, JET_MoveNext, 0);
 		if (error == JET_errNoCurrentRecord)
 		{
@@ -153,6 +160,7 @@ namespace EseDataAccess
 
 	void EseTable::Move(uint rowIndex) const
 	{
+		pimpl->log_->debug("Moving to the record index {} in table {}...", rowIndex, pimpl->tableName_);
 		ThrowOnError(JetMove(pimpl->sessionId_, pimpl->tableId_, JET_MoveFirst, 0));
 		ThrowOnError(JetMove(pimpl->sessionId_, pimpl->tableId_, rowIndex, 0));
 	}
@@ -192,8 +200,9 @@ namespace EseDataAccess
 		return retrieveColumn.itagSequence;
 	}
 
-	wstring EseTable::RetrieveColumnDataAsString(uint columnIndex, uint itagSequence)
+	wstring EseTable::RetrieveColumnDataAsString(uint columnIndex, uint itagSequence) const
 	{
+		pimpl->log_->debug("Retrieving column data at index {}, itag {}...", columnIndex, itagSequence);
 		auto v = pimpl->RetrieveColumnData(columnIndex, itagSequence);
 		if (v.size() == 0)
 		{

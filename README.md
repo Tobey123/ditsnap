@@ -8,25 +8,22 @@ EseDataAccess static library can be used for other ESE inspection applications. 
 class EseTable
 {
 	public:
-		EseTable(const EseDatabase* const eseDatabase, const string& tableName);
+		EseTable(const EseDatabase* const eseDatabase, string tableName);
 		~EseTable();
-		void Init();
-		void MoveFirstRecord();
-		BOOL MoveNextRecord();
-		void Move(uint rowIndex);
+		void MoveFirstRecord() const;
+		bool MoveNextRecord() const;
+		void Move(uint rowIndex) const;
 		int CountColumnValue(uint columnIndex) const;
 		wstring RetrieveColumnDataAsString(uint columnIndex, uint itagSequence = 1);
 		uint GetColumnCount() const;
 		wstring GetColumnName(uint columnIndex) const;
 }
 ```
-Prebuild executable is available here.
-[Download ditsnap.exe](https://github.com/yosqueoy/ditsnap/blob/master/x64/Release/ditsnap.exe?raw=true)
+The executable is available here.
+[Download ditsnap.exe](https://github.com/yosqueoy/ditsnap/releases)
 
 ##Main Window
 <img src="images/screenshot1.png" height="400">
 ##Detail Dialog
 <img src="images/screenshot2.png" height="400">
 
-##Build Environment
-Visual C++ 2013 x64

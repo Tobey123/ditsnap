@@ -2,19 +2,15 @@
 #include "FilterDialog.h"
 #include "resource.h"
 
-FilterDialog::FilterDialog(TableListView* mainListView)
-	: mainListView_(mainListView)
-{
-};
+FilterDialog::FilterDialog(TableListView* mainListView) : mainListView_(mainListView) {};
 
-BOOL FilterDialog::OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
-{
+BOOL FilterDialog::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
 	CenterWindow();
 	auto hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
-	                               GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON));
+	                                           GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON));
 	SetIcon(hIcon, TRUE);
-	HICON__ *hIconSmall = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
-	                                    GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+	HICON__* hIconSmall = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
+	                                                    GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 	SetIcon(hIconSmall, FALSE);
 	checkBoxClassSchema_ = GetDlgItem(IDC_CHECK1);
 	checkBoxAttributeSchema_ = GetDlgItem(IDC_CHECK2);
@@ -29,8 +25,7 @@ BOOL FilterDialog::OnInitDialog(CWindow wndFocus, LPARAM lInitParam)
 	return TRUE;
 }
 
-void FilterDialog::OnOK(UINT uNotifyCode, int nID, CWindow wndCtl)
-{
+void FilterDialog::OnOK(UINT uNotifyCode, int nID, CWindow wndCtl) {
 	int filterFlag = checkBoxClassSchema_.GetCheck();
 	filterFlag += checkBoxAttributeSchema_.GetCheck() << 1;
 	filterFlag += checkBoxSubSchema_.GetCheck() << 2;
@@ -40,7 +35,6 @@ void FilterDialog::OnOK(UINT uNotifyCode, int nID, CWindow wndCtl)
 	EndDialog(nID);
 }
 
-void FilterDialog::OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl)
-{
+void FilterDialog::OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl) {
 	EndDialog(nID);
 }

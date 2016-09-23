@@ -1,26 +1,31 @@
 #pragma once
-#include "stdafx.h"
+#include "esent.h"
+#include <string>
+#include <memory>
+#include <vector>
 
-namespace EseDataAccess
+namespace Ese
 {
 	class EseInstance;
 	class EseDatabase;
 	class EseTable;
 	class EseColumn;
+	class EseColumnData;
+	enum class EseType;
 
 	class EseInstance
 	{
 	public:
-		explicit EseInstance(uint pageSize = DEFAULT_ESE_PAGE_SIZE);
+		explicit EseInstance(unsigned int pageSize = DEFAULT_ESE_PAGE_SIZE);
 		~EseInstance();
-		EseDatabase* OpenDatabase(wstring dbPath) const;
+		EseDatabase* OpenDatabase(std::wstring dbPath) const;
 		JET_SESID GetSessionId() const;
 		JET_INSTANCE GetJetInstance() const;
-		const static uint DEFAULT_ESE_PAGE_SIZE = 8 * 1024;
+		const static unsigned int DEFAULT_ESE_PAGE_SIZE = 8 * 1024;
 
-	private:		
+	private:
 		class Impl;
-		unique_ptr<Impl> pimpl;
+		std::unique_ptr<Impl> pimpl;
 
 		DISALLOW_COPY_AND_ASSIGN(EseInstance);
 	};
@@ -28,36 +33,75 @@ namespace EseDataAccess
 	class EseDatabase
 	{
 	public:
-		EseDatabase(const EseInstance* const parent, string dbPath);
+		EseDatabase(const EseInstance* const parent, std::string dbPath);
 		~EseDatabase();
-		EseTable* OpenTable(wstring tableName) const;
-		vector<wstring> GetTableNames() const;
+		EseTable* OpenTable(std::wstring tableName) const;
+		std::vector<std::wstring> GetTableNames() const;
 		const EseInstance* GetEseInstance() const;
 		JET_DBID GetDbId() const;
 
 	private:
 		class Impl;
-		unique_ptr<Impl> pimpl;
+		std::unique_ptr<Impl> pimpl;
 
 		DISALLOW_COPY_AND_ASSIGN(EseDatabase);
+	};
+
+	enum class EseType
+	{
+		Nil,
+		Bit,
+		UnsignedByte,
+		Short,
+		Long,
+		Currency,
+		IEEESingle,
+		IEEEDouble,
+		DateTime,
+		Binary,
+		Text,
+		LongBinary,
+		LongText,
+		SLV,
+		UnsignedLong,
+		LongLong,
+		GUID,
+		UnsignedShort
+	};
+
+	class EseColumnData
+	{
+	public:
+		EseColumnData(EseType type, std::vector<std::vector<uchar>> values, bool isUnicode);
+		~EseColumnData();
+		EseType GetType() const;
+		std::wstring GetColumnTypeString() const;
+		std::vector<std::vector<uchar>> GetValues() const;
+		std::vector<std::wstring> GetValuesAsString() const;
+	private:
+		class Impl;
+		std::unique_ptr<Impl> pimpl;
+
+		DISALLOW_COPY_AND_ASSIGN(EseColumnData);
 	};
 
 	class EseTable
 	{
 	public:
-		EseTable(const EseDatabase* const eseDatabase, string tableName);
+		EseTable(const EseDatabase* const eseDatabase, std::string tableName);
 		~EseTable();
 		void MoveFirstRecord() const;
 		bool MoveNextRecord() const;
-		void Move(uint rowIndex) const;
-		int CountColumnValue(uint columnIndex) const;
-		wstring RetrieveColumnDataAsString(uint columnIndex, uint itagSequence = 1);
-		uint GetColumnCount() const;
-		wstring GetColumnName(uint columnIndex) const;
+		void Move(unsigned int rowIndex) const;
+		int CountColumnValue(unsigned int columnIndex) const;
+		std::wstring RetrieveColumnDataAsString(unsigned int columnIndex, unsigned int itagSequence = 1) const;
+		unsigned int GetColumnCount() const;
+		std::wstring GetColumnName(unsigned int columnIndex) const;
+		EseColumnData* GetColumnData(unsigned int columnIndex) const;
 
 	private:
 		class Impl;
-		unique_ptr<Impl> pimpl;
+		std::unique_ptr<Impl> pimpl;
 
 		DISALLOW_COPY_AND_ASSIGN(EseTable);
 	};
@@ -65,18 +109,17 @@ namespace EseDataAccess
 	class EseColumn
 	{
 	public:
-		EseColumn(uint id, string name, uint type, bool isUnicode);
+		EseColumn(unsigned int id, std::string name, unsigned int type, bool isUnicode);
 		~EseColumn();
-		uint GetId() const;
-		string GetName() const;
-		uint GetType() const;
+		unsigned int GetId() const;
+		std::string GetName() const;
+		unsigned int GetType() const;
 		bool IsUnicode() const;
 
 	private:
 		class Impl;
-		unique_ptr<Impl> pimpl;
+		std::unique_ptr<Impl> pimpl;
 
 		DISALLOW_COPY_AND_ASSIGN(EseColumn);
-	};	
-} // name space EseDataAccess
-
+	};
+} // name space Ese

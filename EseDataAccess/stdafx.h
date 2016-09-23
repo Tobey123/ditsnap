@@ -1,16 +1,13 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN		
-#include <stdio.h>
 #include <tchar.h>
 #include <vector>
 #include <string>
 #include <memory>
-#include <sstream>
 #include <iomanip>
+#include <sstream>
 #include "windows.h"
-#include "esent.h"
 #include "atlbase.h"
-
 
 using std::vector;
 using std::string;
@@ -20,7 +17,11 @@ using std::to_string;
 using std::to_wstring;
 using std::unique_ptr;
 
-typedef unsigned int uint;
+using uchar = unsigned char;
+using ushort = unsigned short;
+using uint = unsigned int;
+using ulong = unsigned long;
+using ulonglong = unsigned long long;;
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
 TypeName(const TypeName&);                 \

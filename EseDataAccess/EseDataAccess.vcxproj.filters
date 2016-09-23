@@ -7,11 +7,12 @@
     <ClCompile Include="EseDatabase.cpp" />
     <ClCompile Include="EseTable.cpp" />
     <ClCompile Include="EseColumn.cpp" />
+    <ClCompile Include="EseColumnData.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EseDataAccess.h" />
     <ClInclude Include="esent.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="util.h" />
+    <ClInclude Include="EseDataAccess.h" />
   </ItemGroup>
 </Project>

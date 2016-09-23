@@ -3,7 +3,7 @@
 #include "EseDbManager.h"
 
 // Defined in EseDataAccess.h 
-namespace EseDataAccess
+namespace Ese
 {
 	class EseTable;
 	class EseDatabase;
@@ -18,7 +18,7 @@ public:
 	BEGIN_MSG_MAP_EX(DbTreeView)
 		REFLECTED_NOTIFY_CODE_HANDLER_EX(NM_DBLCLK, OnTreeDoubleClick)
 		DEFAULT_REFLECTION_HANDLER()
-	END_MSG_MAP()
+		END_MSG_MAP()
 
 	DbTreeView(EseDbManager* eseDbManager);
 	~DbTreeView(void);

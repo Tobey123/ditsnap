@@ -1,11 +1,11 @@
 #pragma once
 #include "Interfaces.h"
-#include "EseDbManager.h"
 
+class EseDbManager;
 class DetailDialog;
 
 class TableListView : public CWindowImpl<TableListView, CListViewCtrl>,
-                       ITableObserver, IDbObserver
+                      ITableObserver, IDbObserver
 {
 public:
 	enum
@@ -23,7 +23,7 @@ public:
 		MSG_WM_CREATE(OnCreate)
 		REFLECTED_NOTIFY_CODE_HANDLER_EX(NM_DBLCLK, OnListDoubleClick)
 		DEFAULT_REFLECTION_HANDLER()
-	END_MSG_MAP()
+		END_MSG_MAP()
 
 	TableListView(EseDbManager* eseDbManager);
 	~TableListView();

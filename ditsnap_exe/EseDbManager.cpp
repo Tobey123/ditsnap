@@ -2,58 +2,45 @@
 #include "EseDbManager.h"
 #include "../EseDataAccess/EseDataAccess.h"
 
-using namespace EseDataAccess;
+using namespace Ese;
 
-EseDbManager::EseDbManager()
-	: eseInstance_(nullptr),
-	  eseDatabase_(nullptr),
-	  eseTable_(nullptr)
-{
-}
+EseDbManager::EseDbManager() : eseInstance_(nullptr),
+                               eseDatabase_(nullptr),
+                               eseTable_(nullptr) {}
 
-EseDbManager::~EseDbManager()
-{
+EseDbManager::~EseDbManager() {
 	CleanupEse();
 }
 
-void EseDbManager::RegisterTableObserver(ITableObserver* o)
-{
+void EseDbManager::RegisterTableObserver(ITableObserver* o) {
 	tableObservers_.push_back(o);
 }
 
-void EseDbManager::RemoveTableObserver(ITableObserver* o)
-{
+void EseDbManager::RemoveTableObserver(ITableObserver* o) {
 	tableObservers_.remove(o);
 }
 
-void EseDbManager::NotifyTableObservers()
-{
-	for (auto& o : tableObservers_)
-	{
+void EseDbManager::NotifyTableObservers() {
+	for (auto& o : tableObservers_) {
 		o->LoadEseTable();
 	}
 }
 
-void EseDbManager::RegisterDbObserver(IDbObserver* o)
-{
+void EseDbManager::RegisterDbObserver(IDbObserver* o) {
 	tableNameObservers_.push_back(o);
 }
 
-void EseDbManager::RemoveDbObserver(IDbObserver* o)
-{
+void EseDbManager::RemoveDbObserver(IDbObserver* o) {
 	tableNameObservers_.remove(o);
 }
 
-void EseDbManager::NotifyDbObservers()
-{
-	for (auto& o : tableNameObservers_)
-	{
+void EseDbManager::NotifyDbObservers() {
+	for (auto& o : tableNameObservers_) {
 		o->LoadEseDbManager();
 	}
 }
 
-void EseDbManager::OpenFile(wstring path)
-{
+void EseDbManager::OpenFile(wstring path) {
 	filePath_ = path;
 	CleanupEse();
 	eseInstance_ = new EseInstance();
@@ -62,65 +49,57 @@ void EseDbManager::OpenFile(wstring path)
 	NotifyDbObservers();
 }
 
-wstring EseDbManager::GetFilePath() const
-{
+wstring EseDbManager::GetFilePath() const {
 	return filePath_;
 }
 
-void EseDbManager::SetTable(wstring name)
-{
+void EseDbManager::SetTable(wstring name) {
 	eseTable_ = eseDatabase_->OpenTable(name);
 	currentTableName_ = name;
 	NotifyTableObservers();
 }
 
-wstring EseDbManager::GetCurrentTableName() const
-{
+wstring EseDbManager::GetCurrentTableName() const {
 	return currentTableName_;
 }
 
-vector<wstring> EseDbManager::GetTableNames() const
-{
+vector<wstring> EseDbManager::GetTableNames() const {
 	return tableNames_;
 }
 
-void EseDbManager::MoveFirstRecord() const
-{
+void EseDbManager::MoveFirstRecord() const {
 	eseTable_->MoveFirstRecord();
 }
 
-BOOL EseDbManager::MoveNextRecord() const
-{
+BOOL EseDbManager::MoveNextRecord() const {
 	return eseTable_->MoveNextRecord();
 }
 
-void EseDbManager::Move(uint rowIndex) const
-{
+void EseDbManager::Move(uint rowIndex) const {
 	return eseTable_->Move(rowIndex);
 }
 
-wstring EseDbManager::RetrieveColumnDataAsString(uint columnIndex, uint itagSequence) const
-{
+wstring EseDbManager::RetrieveColumnDataAsString(uint columnIndex, uint itagSequence) const {
 	return eseTable_->RetrieveColumnDataAsString(columnIndex, itagSequence);
 }
 
-uint EseDbManager::GetColumnCount() const
-{
+uint EseDbManager::GetColumnCount() const {
 	return eseTable_->GetColumnCount();
 }
 
-wstring EseDbManager::GetColumnName(uint columnIndex) const
-{
+wstring EseDbManager::GetColumnName(uint columnIndex) const {
 	return eseTable_->GetColumnName(columnIndex);
 }
 
-int EseDbManager::CountColumnValue(uint columnIndex) const
-{
+int EseDbManager::CountColumnValue(uint columnIndex) const {
 	return eseTable_->CountColumnValue(columnIndex);
 }
 
-void EseDbManager::CleanupEse()
-{
+EseColumnData* EseDbManager::GetColumnData(uint columnIndex) const {
+	return eseTable_->GetColumnData(columnIndex);
+}
+
+void EseDbManager::CleanupEse() {
 	delete eseInstance_;
 	eseInstance_ = nullptr;
 	delete eseDatabase_;

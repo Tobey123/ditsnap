@@ -5,9 +5,7 @@ class MainFrame;
 class ITableObserver
 {
 public:
-	virtual ~ITableObserver()
-	{
-	};
+	virtual ~ITableObserver() { };
 
 	virtual void LoadEseTable() = 0;
 };
@@ -15,9 +13,7 @@ public:
 class IDbObserver
 {
 public:
-	virtual ~IDbObserver()
-	{
-	};
+	virtual ~IDbObserver() { };
 
 	virtual void LoadEseDbManager() = 0;
 };
@@ -25,9 +21,7 @@ public:
 class ITableObservable
 {
 public:
-	virtual ~ITableObservable()
-	{
-	};
+	virtual ~ITableObservable() { };
 
 	virtual void RegisterTableObserver(ITableObserver* o) = 0;
 	virtual void RemoveTableObserver(ITableObserver* o) = 0;
@@ -37,10 +31,8 @@ public:
 class IDbObservable
 {
 public:
-	virtual ~IDbObservable()
-	{
-	};
-	
+	virtual ~IDbObservable() { };
+
 	virtual void RegisterDbObserver(IDbObserver* o) = 0;
 	virtual void RemoveDbObserver(IDbObserver* o) = 0;
 	virtual void NotifyDbObservers() = 0;

@@ -5,13 +5,16 @@
 class FilterDialog : public CDialogImpl<FilterDialog>
 {
 public:
-	enum { IDD = IDD_FILTER_DIALOG };
+	enum
+	{
+		IDD = IDD_FILTER_DIALOG
+	};
 
 	BEGIN_MSG_MAP(FilterDialog)
 		MSG_WM_INITDIALOG(OnInitDialog)
 		COMMAND_ID_HANDLER_EX(IDOK, OnOK)
 		COMMAND_ID_HANDLER_EX(IDCANCEL, OnCancel)
-	END_MSG_MAP()
+		END_MSG_MAP()
 
 	FilterDialog(TableListView* mainListView);
 	BOOL OnInitDialog(CWindow wndFocus, LPARAM lInitParam);

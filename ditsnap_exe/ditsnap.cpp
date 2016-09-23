@@ -4,14 +4,12 @@
 
 CAppModule _Module;
 
-int Run(LPTSTR /*lpstrCmdLine*/  = nullptr, int nCmdShow = SW_SHOWDEFAULT)
-{
+int Run(LPTSTR /*lpstrCmdLine*/  = nullptr, int nCmdShow = SW_SHOWDEFAULT) {
 	CMessageLoop theLoop;
 	_Module.AddMessageLoop(&theLoop);
 	auto eseDbManager = new EseDbManager();
 	auto wndMain = new MainFrame(eseDbManager);
-	if (wndMain->CreateEx() == nullptr)
-	{
+	if (wndMain->CreateEx() == nullptr) {
 		ATLTRACE(_T("Main window creation failed!\n"));
 		return 0;
 	}
@@ -22,8 +20,7 @@ int Run(LPTSTR /*lpstrCmdLine*/  = nullptr, int nCmdShow = SW_SHOWDEFAULT)
 	return nRet;
 }
 
-int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int nCmdShow)
-{
+int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int nCmdShow) {
 	HRESULT hRes = CoInitialize(nullptr);
 	ATLASSERT(SUCCEEDED(hRes));
 	::DefWindowProc(nullptr, 0, 0, 0L);

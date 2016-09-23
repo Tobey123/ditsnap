@@ -2,28 +2,23 @@
 #include "DetailDialog.h"
 #include "TableListView.h"
 #include "util.h"
+#include "EseDbManager.h"
 
-using namespace EseDataAccess;
+using namespace Ese;
 
 DetailDialog::DetailDialog(EseDbManager* eseDbManager,
-                             TableListView* parent,
-                             int rowIndex)
-	: m_bMsgHandled(0), eseDbManager_(eseDbManager), parent_(parent), rowIndex_(rowIndex)
-{
-};
+                           TableListView* parent,
+                           int rowIndex) : m_bMsgHandled(0), eseDbManager_(eseDbManager), parent_(parent), rowIndex_(rowIndex) {}
 
-DetailDialog::~DetailDialog()
-{
-};
+DetailDialog::~DetailDialog() {}
 
-LRESULT DetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam)
-{
+LRESULT DetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam) {
 	CenterWindow();
 	auto hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
-	                                            GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON));
+	                                           GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON));
 	SetIcon(hIcon, TRUE);
 	auto hIconSmall = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
-	                                                 GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+	                                                GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 	SetIcon(hIconSmall, FALSE);
 	detailListView_ = GetDlgItem(IDC_LIST1);
 	checkBox_ = GetDlgItem(IDC_CHECK1);
@@ -38,12 +33,10 @@ LRESULT DetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam)
 	                             rcList.Width() - 300 - nScrollWidth - n3DEdge * 2, -1);
 	checkBox_.SetCheck(1);
 
-	try
-	{
+	try {
 		eseDbManager_->Move(rowIndex_);
 	}
-	catch (runtime_error& e)
-	{
+	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
 	}
 
@@ -52,83 +45,67 @@ LRESULT DetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam)
 	return TRUE;
 }
 
-void DetailDialog::OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl)
-{
+void DetailDialog::OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl) {
 	DestroyWindow();
 }
 
-void DetailDialog::OnShowAllCheckBoxToggled(UINT uNotifyCode, int nID, CWindow wndCtl)
-{
+void DetailDialog::OnShowAllCheckBoxToggled(UINT uNotifyCode, int nID, CWindow wndCtl) {
 	SetupListItems();
 }
 
-void DetailDialog::SetupTopLabel() const
-{
+void DetailDialog::SetupTopLabel() const {
 	auto RDN = parent_->GetColumnIdFromColumnName(L"ATTm589825");
 	auto rdnLabel = GetDlgItem(IDC_RDN);
 
-	try
-	{
+	try {
 		auto rdn = eseDbManager_->RetrieveColumnDataAsString(RDN);
 		rdnLabel.SetWindowTextW(rdn.c_str());
 	}
-	catch (runtime_error& e)
-	{
+	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
 	}
 }
 
-void DetailDialog::SetupListItems()
-{
-	try
-	{
+void DetailDialog::SetupListItems() {
+	try {
 		detailListView_.DeleteAllItems();
-		bool filterNoValue = static_cast<bool>(checkBox_.GetCheck());
-		int visibleColumnIndex = 0;
+		auto filterNoValue = !!(checkBox_.GetCheck());
+		auto visibleColumnIndex = 0;
 		auto nColumn = eseDbManager_->GetColumnCount();
-		for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex)
-		{
+		for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex) {
 			auto columnValues = GetColumnValueString(columnIndex);
 			auto columnName = eseDbManager_->GetColumnName(columnIndex);
 			auto adName = parent_->GetAdNameFromColumnName(columnName);
-			if (0 == columnValues.size())
-			{
-				if (!filterNoValue) 
-				{
+			if (0 == columnValues.size()) {
+				if (!filterNoValue) {
 					AddRow(visibleColumnIndex, columnName, adName, L"<not set>");
 					++visibleColumnIndex;
 				}
 			}
-			else
-			{
+			else {
 				AddRow(visibleColumnIndex, columnName, adName, columnValues);
 				++visibleColumnIndex;
 			}
 		}
 	}
-	catch (runtime_error& e)
-	{
+	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
 	}
 }
 
-void DetailDialog::AddRow(int index, wstring col1, wstring col2, wstring col3)
-{
+void DetailDialog::AddRow(int index, wstring col1, wstring col2, wstring col3) {
 	detailListView_.AddItem(index, 0, col1.c_str());
 	detailListView_.AddItem(index, 1, col2.c_str());
 	detailListView_.AddItem(index, 2, col3.c_str());
 }
 
-wstring DetailDialog::GetColumnValueString(uint columnIndex) const
-{
+wstring DetailDialog::GetColumnValueString(uint columnIndex) const {
 	wstring columnValues;
 	auto numberOfColumnValue = eseDbManager_->CountColumnValue(columnIndex);
-	for (auto itagSequence = 1; itagSequence <= numberOfColumnValue; ++itagSequence)
-	{
+	for (auto itagSequence = 1; itagSequence <= numberOfColumnValue; ++itagSequence) {
 		auto columnValue = eseDbManager_->RetrieveColumnDataAsString(columnIndex, itagSequence);
 		columnValues += columnValue;
-		if (numberOfColumnValue != itagSequence)
-		{
+		if (numberOfColumnValue != itagSequence) {
 			columnValues += L"; ";
 		}
 	}
@@ -136,23 +113,19 @@ wstring DetailDialog::GetColumnValueString(uint columnIndex) const
 	return columnValues;
 }
 
-LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow wndCtl)
-{
+LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow wndCtl) {
 	CString copyText;
-	for (auto i = 0; i < detailListView_.GetItemCount(); ++i)
-	{
+	for (auto i = 0; i < detailListView_.GetItemCount(); ++i) {
 		CString s;
 		detailListView_.GetItemText(i, 0, s);
 		copyText.Append(s);
 
 		CString temp;
 		detailListView_.GetItemText(i, 1, temp);
-		if (temp.IsEmpty())
-		{
+		if (temp.IsEmpty()) {
 			s.Format(L": ");
 		}
-		else
-		{
+		else {
 			s.Format(L" ( %s ): ", static_cast<const wchar_t*>(temp));
 		}
 		copyText.Append(s);
@@ -162,8 +135,7 @@ LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow 
 		copyText.Append(L"\r\n");
 	}
 
-	if (!OpenClipboard())
-	{
+	if (!OpenClipboard()) {
 		ShowMessageBox(L"Cannot open clipboard.");
 		return -1;
 	}
@@ -173,14 +145,12 @@ LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow 
 	memcpy(pBuf, static_cast<LPCTSTR>(copyText), bufSize);
 	GlobalUnlock(hBuf);
 
-	if (!EmptyClipboard())
-	{
+	if (!EmptyClipboard()) {
 		ShowMessageBox(L"Cannot empty clipboard.");
 		return -1;
 	}
 
-	if (nullptr == SetClipboardData(CF_UNICODETEXT, hBuf))
-	{
+	if (nullptr == SetClipboardData(CF_UNICODETEXT, hBuf)) {
 		CloseClipboard();
 		return 1;
 	}

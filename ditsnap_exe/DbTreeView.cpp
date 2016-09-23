@@ -4,39 +4,31 @@
 #include "resource.h"
 #include "util.h"
 
-using namespace EseDataAccess;
+using namespace Ese;
 
-DbTreeView::DbTreeView(EseDbManager* eseDbManager)
-	: eseDbManager_(eseDbManager)
-{
+DbTreeView::DbTreeView(EseDbManager* eseDbManager) : eseDbManager_(eseDbManager) {
 	eseDbManager_->RegisterDbObserver(this);
 }
 
-DbTreeView::~DbTreeView(void)
-{
+DbTreeView::~DbTreeView(void) {
 	eseDbManager_->RemoveDbObserver(this);
 }
 
-LRESULT DbTreeView::OnTreeDoubleClick(LPNMHDR pnmh) const
-{
-	UINT uFlag;
+LRESULT DbTreeView::OnTreeDoubleClick(LPNMHDR pnmh) const {
+	uint uFlag;
 	CPoint pt = GetMessagePos();
 	ScreenToClient(&pt);
 	auto hItem = HitTest(pt, &uFlag);
-	if (hItem == nullptr || !(uFlag & TVHT_ONITEM))
-	{
+	if (hItem == nullptr || !(uFlag & TVHT_ONITEM)) {
 		return 0;
 	}
 
 	wchar_t tableName[1024];
-	if (GetItemText(hItem, tableName, sizeof(tableName) / sizeof(tableName[0])))
-	{
-		try
-		{
-			eseDbManager_->SetTable(tableName);			
+	if (GetItemText(hItem, tableName, sizeof(tableName) / sizeof(tableName[0]))) {
+		try {
+			eseDbManager_->SetTable(tableName);
 		}
-		catch (runtime_error& e)
-		{
+		catch (runtime_error& e) {
 			ShowMessageBox(e.what());
 		}
 	}
@@ -44,34 +36,27 @@ LRESULT DbTreeView::OnTreeDoubleClick(LPNMHDR pnmh) const
 	return 0;
 }
 
-void DbTreeView::LoadEseDbManager()
-{
+void DbTreeView::LoadEseDbManager() {
 	DeleteAllItems();
 	CImageList images;
-	images.CreateFromImage(IDB_BITMAP1, 16, 0,
-	                       RGB( 255, 0, 255 ), IMAGE_BITMAP, LR_CREATEDIBSECTION);
+	images.CreateFromImage(IDB_BITMAP1, 16, 0, RGB( 255, 0, 255 ), IMAGE_BITMAP, LR_CREATEDIBSECTION);
 	SetImageList(images);
 	auto hRootItem = InsertItem(eseDbManager_->GetFilePath().c_str(), 0, 0, TVI_ROOT, TVI_LAST);
-	if (hRootItem != nullptr)
-	{
+	if (hRootItem != nullptr) {
 		SetItemData(hRootItem, reinterpret_cast<DWORD_PTR>(hRootItem));
 	}
 
-	try
-	{
+	try {
 		auto tableNames = eseDbManager_->GetTableNames();
-		for (auto& tableName : tableNames)
-		{
+		for (auto& tableName : tableNames) {
 			auto hItem = InsertItem(tableName.c_str(), 1, 1, hRootItem, TVI_LAST);
-			if (hItem != nullptr)
-			{
+			if (hItem != nullptr) {
 				SetItemData(hItem, reinterpret_cast<DWORD_PTR>(hItem));
 				EnsureVisible(hItem);
 			}
 		}
 	}
-	catch (runtime_error& e)
-	{
+	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
 	}
 }

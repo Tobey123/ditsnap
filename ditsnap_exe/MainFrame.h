@@ -12,7 +12,7 @@ public:
 
 	BEGIN_UPDATE_UI_MAP(MainFrame)
 		UPDATE_ELEMENT(ID_VIEW_STATUS_BAR, UPDUI_MENUPOPUP)
-	END_UPDATE_UI_MAP()
+		END_UPDATE_UI_MAP()
 
 	BEGIN_MSG_MAP_EX(MainFrame)
 		MSG_WM_CREATE(OnCreate)
@@ -26,7 +26,7 @@ public:
 		CHAIN_MSG_MAP(CFrameWindowImpl<MainFrame>)
 		CHAIN_CLIENT_COMMANDS() // Command chains views
 		REFLECT_NOTIFICATIONS() // Message Reflection
-	END_MSG_MAP()
+		END_MSG_MAP()
 
 	explicit MainFrame(EseDbManager* eseDbManager);
 

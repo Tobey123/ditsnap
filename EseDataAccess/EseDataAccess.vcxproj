@@ -80,6 +80,7 @@
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EseColumnData.cpp" />
     <ClInclude Include="EseDataAccess.h" />
     <ClInclude Include="esent.h" />
     <ClInclude Include="util.h" />

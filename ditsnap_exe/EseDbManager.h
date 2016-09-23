@@ -2,11 +2,12 @@
 #include "Interfaces.h"
 
 // Defined in EseDataAccess.h 
-namespace EseDataAccess
+namespace Ese
 {
 	class EseTable;
 	class EseDatabase;
 	class EseInstance;
+	class EseColumnData;
 }
 
 class EseDbManager :public ITableObservable, IDbObservable
@@ -15,12 +16,12 @@ public:
 	EseDbManager();
 	~EseDbManager();
 
-	virtual void RegisterTableObserver(ITableObserver* o) override;
-	virtual void RemoveTableObserver(ITableObserver* o) override;
-	virtual void NotifyTableObservers() override;
-	virtual void RegisterDbObserver(IDbObserver* o) override;
-	virtual void RemoveDbObserver(IDbObserver* o) override;
-	virtual void NotifyDbObservers() override;
+	void RegisterTableObserver(ITableObserver* o) override;
+	void RemoveTableObserver(ITableObserver* o) override;
+	void NotifyTableObservers() override;
+	void RegisterDbObserver(IDbObserver* o) override;
+	void RemoveDbObserver(IDbObserver* o) override;
+	void NotifyDbObservers() override;
 	void OpenFile(wstring path);
 	wstring GetFilePath() const;
 	void SetTable(wstring name);
@@ -33,13 +34,14 @@ public:
 	uint GetColumnCount() const;
 	wstring GetColumnName(uint columnIndex) const;
 	int CountColumnValue(uint columnIndex) const;
+	Ese::EseColumnData* GetColumnData(uint columnIndex) const;
 
 private:
 	list<ITableObserver*> tableObservers_;
 	list<IDbObserver*> tableNameObservers_;
-	EseDataAccess::EseInstance* eseInstance_;
-	EseDataAccess::EseDatabase* eseDatabase_;
-	EseDataAccess::EseTable* eseTable_;
+	Ese::EseInstance* eseInstance_;
+	Ese::EseDatabase* eseDatabase_;
+	Ese::EseTable* eseTable_;
 	wstring filePath_;
 	vector<wstring> tableNames_;
 	wstring currentTableName_;

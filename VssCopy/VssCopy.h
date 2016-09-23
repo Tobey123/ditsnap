@@ -9,9 +9,7 @@ namespace Vss
 	public:
 		VssCopy(const wchar_t* sourcePath, const wchar_t* destinationPath) :
 			sourcePath_(sourcePath), destinationPath_(destinationPath), snapshotDeviceObject_(nullptr),
-			snapshotProperties_(nullptr), backupState_(FALSE)
-		{
-		};
+			snapshotProperties_(nullptr), backupState_(FALSE) { };
 
 		~VssCopy();
 
@@ -20,13 +18,11 @@ namespace Vss
 		void CopyFileFromSnapshot();
 
 		//Accessors
-		const wchar_t* GetSourcePath()
-		{
+		const wchar_t* GetSourcePath() {
 			return sourcePath_;
 		};
 
-		const wchar_t* GetDestinationPath()
-		{
+		const wchar_t* GetDestinationPath() {
 			return destinationPath_;
 		};
 
@@ -43,4 +39,3 @@ namespace Vss
 
 	HRESULT CopyFileFromSnapshot(const wchar_t* sourcePath, const wchar_t* destinationPath);
 }// namespace
-

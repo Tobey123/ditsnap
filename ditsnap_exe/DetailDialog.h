@@ -1,7 +1,7 @@
 #pragma once
 #include "resource.h"
 
-namespace EseDataAccess
+namespace Ese
 {
 	class EseTable;
 }
@@ -12,14 +12,17 @@ class EseDbManager;
 class DetailDialog : public CDialogImpl<DetailDialog>
 {
 public:
-	enum { IDD = IDD_DETAIL_DIALOG };
+	enum
+	{
+		IDD = IDD_DETAIL_DIALOG
+	};
 
 	BEGIN_MSG_MAP_EX(DetailDialog)
 		MSG_WM_INITDIALOG(OnInitDialog)
 		COMMAND_ID_HANDLER_EX(IDCANCEL, OnCancel)
 		COMMAND_ID_HANDLER_EX(IDC_CHECK1, OnShowAllCheckBoxToggled);
 		COMMAND_HANDLER_EX(IDC_BUTTON_COPYALL, BN_CLICKED, OnCopyAllButtonClicked)
-	END_MSG_MAP()
+		END_MSG_MAP()
 
 	DetailDialog(EseDbManager* eseDbManager, TableListView* paBrent, int rowIndex);
 	~DetailDialog();

@@ -10,21 +10,17 @@ public:
 		IDD = IDD_SCWIZARD1
 	};
 
-	explicit SnapshotWizardPage1(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr))
-		: CPropertyPageImpl<SnapshotWizardPage1>(title)
-	{
-	}
+	explicit SnapshotWizardPage1(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr)) : CPropertyPageImpl<SnapshotWizardPage1>(title) { }
 
 	BEGIN_MSG_MAP(SnapshotWizardPage1)
 		MSG_WM_INITDIALOG(OnInitDialog)
 		CHAIN_MSG_MAP(CPropertyPageImpl<SnapshotWizardPage1>)
-	END_MSG_MAP()
+		END_MSG_MAP()
 
 	BOOL OnInitDialog(CWindow wndFocus, LPARAM lInitParam);
 	LRESULT OnWizardNext();
 
-	void SetSharedString(wchar_t* sharedStringPage1)
-	{
+	void SetSharedString(wchar_t* sharedStringPage1) {
 		sharedStringPage1_ = sharedStringPage1;
 	}
 
@@ -44,19 +40,15 @@ public:
 		IDD = IDD_SCWIZARD2
 	};
 
-	explicit SnapshotWizardPage2(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr))
-		: CPropertyPageImpl<SnapshotWizardPage2>(title)
-	{
-	}
+	explicit SnapshotWizardPage2(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr)) : CPropertyPageImpl<SnapshotWizardPage2>(title) { }
 
 	BEGIN_MSG_MAP(SnapshotWizardPage2)
 		CHAIN_MSG_MAP(CPropertyPageImpl<SnapshotWizardPage2>)
-	END_MSG_MAP()
+		END_MSG_MAP()
 
 	BOOL OnSetActive();
 
-	void SetSharedString(wchar_t* sharedStringPage2)
-	{
+	void SetSharedString(wchar_t* sharedStringPage2) {
 		sharedStringPage2_ = sharedStringPage2;
 	}
 
@@ -70,18 +62,16 @@ public:
 	CSnapshotWizard(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr),
 	                UINT uStartPage = 0, HWND hWndParent = nullptr);
 
-	~CSnapshotWizard()
-	{
+	~CSnapshotWizard() {
 		delete sharedString_;
 	}
 
 	BEGIN_MSG_MAP(CSnapshotWizard)
 		CHAIN_MSG_MAP(CPropertySheetImpl<CSnapshotWizard>)
-	END_MSG_MAP()
+		END_MSG_MAP()
 
 	//It is the client's responsibility that the return string should be deleted.
-	wchar_t* GetSnapshotFilePath() const
-	{
+	wchar_t* GetSnapshotFilePath() const {
 		return sharedString_;
 	}
 

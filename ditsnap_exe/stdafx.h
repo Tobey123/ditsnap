@@ -29,6 +29,7 @@ extern CAppModule _Module;
 #include <vector>
 #include <list>
 #include <map>
+#include <memory>
 
 using std::map;
 using std::string;
@@ -37,14 +38,19 @@ using std::pair;
 using std::vector;
 using std::list;
 using std::runtime_error;
+using std::unique_ptr;
+using std::make_unique;
 
-inline wstring to_w(const char* s)
-{
+inline wstring to_w(const char* s) {
 	string str(s);
 	return wstring(str.begin(), str.end());
 }
 
-typedef unsigned int uint;
+using uchar = unsigned char;
+using ushort = unsigned short;
+using uint = unsigned int;
+using ulong = unsigned long;
+using ulonglong = unsigned long long;
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
 TypeName(const TypeName&);                 \
@@ -57,7 +63,7 @@ void operator=(const TypeName&)
 #elif defined _M_IA64
   #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='ia64' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #elif defined _M_X64
-  #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #else
   #pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif

@@ -6,36 +6,29 @@ namespace Vss
 {
 #define CHECK_HRESULT(x) { HRESULT ckhr = ((x)); if (FAILED(ckhr)) AtlThrow(ckhr); }
 
-	VssCopy::~VssCopy()
-	{
+	VssCopy::~VssCopy() {
 		//Free resource allocated by GetSnapshotProperties()
-		if (snapshotProperties_ != nullptr)
-		{
+		if (snapshotProperties_ != nullptr) {
 			VssFreeSnapshotProperties(snapshotProperties_);
 			delete snapshotProperties_;
 		}
 
 		//Free resource allocated by SetBackupState()
-		if (backupState_)
-		{
-			try
-			{
+		if (backupState_) {
+			try {
 				CComPtr<IVssAsync> pBackupCompleteResults;
 				CHECK_HRESULT( pBackupComponents_->BackupComplete(&pBackupCompleteResults) );
 				WaitAndQueryStatus(pBackupCompleteResults);
 
 				CHECK_HRESULT( pBackupComponents_->FreeWriterMetadata() );
 			}
-			catch (CAtlException&)
-			{
-			}
+			catch (CAtlException&) { }
 		}
 
 		CoUninitialize();
 	}
 
-	void VssCopy::Init()
-	{
+	void VssCopy::Init() {
 		CHECK_HRESULT( ::CoInitialize(NULL) );
 
 		CHECK_HRESULT( ::CreateVssBackupComponents(&pBackupComponents_) );
@@ -49,8 +42,7 @@ namespace Vss
 		CHECK_HRESULT( pBackupComponents_->StartSnapshotSet(&snapshotSetId) );
 
 		wchar_t volumePathName[MAX_PATH];
-		if (! ::GetVolumePathName(sourcePath_, volumePathName, MAX_PATH))
-		{
+		if (! ::GetVolumePathName(sourcePath_, volumePathName, MAX_PATH)) {
 			AtlThrowLastWin32();
 		}
 
@@ -75,12 +67,9 @@ namespace Vss
 		return;
 	}
 
-
-	void VssCopy::CopyFileFromSnapshot()
-	{
+	void VssCopy::CopyFileFromSnapshot() {
 		wchar_t volumePathName[MAX_PATH];
-		if (! ::GetVolumePathName(sourcePath_, volumePathName, MAX_PATH))
-		{
+		if (! ::GetVolumePathName(sourcePath_, volumePathName, MAX_PATH)) {
 			AtlThrowLastWin32();
 		}
 
@@ -92,44 +81,36 @@ namespace Vss
 		snapshotSourcePath.Append(L"\\");
 		snapshotSourcePath.Append(subPath);
 
-		if (! ::CopyFile(snapshotSourcePath, destinationPath_, FALSE))
-		{
+		if (! ::CopyFile(snapshotSourcePath, destinationPath_, FALSE)) {
 			AtlThrowLastWin32();
 		}
 
 		return;
 	}
 
-	void VssCopy::WaitAndQueryStatus(CComPtr<IVssAsync> pVssAsync)
-	{
+	void VssCopy::WaitAndQueryStatus(CComPtr<IVssAsync> pVssAsync) {
 		CHECK_HRESULT( pVssAsync->Wait() );
 
 		HRESULT hr;
 		CHECK_HRESULT( pVssAsync->QueryStatus(&hr, nullptr) );
 
-		if (hr == VSS_S_ASYNC_CANCELLED)
-		{
+		if (hr == VSS_S_ASYNC_CANCELLED) {
 			AtlThrow(hr);
 		}
 
 		return;
 	}
 
-
-	HRESULT CopyFileFromSnapshot(const wchar_t* sourcePath, const wchar_t* destinationPath)
-	{
+	HRESULT CopyFileFromSnapshot(const wchar_t* sourcePath, const wchar_t* destinationPath) {
 		wchar_t expandedSourcePath[MAX_PATH];
 		wchar_t expandedDestinationPath[MAX_PATH];
 
-		try
-		{
-			if (0 == ::ExpandEnvironmentStrings(sourcePath, expandedSourcePath, MAX_PATH))
-			{
+		try {
+			if (0 == ::ExpandEnvironmentStrings(sourcePath, expandedSourcePath, MAX_PATH)) {
 				throw CAtlException(GetLastError());
 			}
 
-			if (0 == ::ExpandEnvironmentStrings(destinationPath, expandedDestinationPath, MAX_PATH))
-			{
+			if (0 == ::ExpandEnvironmentStrings(destinationPath, expandedDestinationPath, MAX_PATH)) {
 				throw CAtlException(GetLastError());
 			}
 
@@ -137,12 +118,10 @@ namespace Vss
 			vss.Init();
 			vss.CopyFileFromSnapshot();
 		}
-		catch (CAtlException& e)
-		{
+		catch (CAtlException& e) {
 			return static_cast<HRESULT>(e);
 		}
 
 		return S_OK;
 	}
 } // namespace
-

@@ -41,7 +41,7 @@ private:
 	void SetupTopLabel() const;
 	void SetupListItems();
 	wstring GetColumnValueString(uint columnIndex) const;
-	void AddRow(int index, wstring col1, wstring col2, wstring col3);
+	void AddRow(int index, wstring name, wstring desc, wstring type, wstring value, wstring intepreted);
 
 	DISALLOW_COPY_AND_ASSIGN(DetailDialog);
 };

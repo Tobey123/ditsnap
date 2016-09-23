@@ -15,7 +15,7 @@ namespace Ese
 		DISALLOW_COPY_AND_ASSIGN(EseColumnData::Impl);
 	};
 
-	EseColumnData::EseColumnData(EseType type, vector<vector<uchar>> values, bool isUnicode) {
+	EseColumnData::EseColumnData(EseType type, vector<vector<uchar>> values, bool isUnicode): pimpl(new Impl) {
 		pimpl->type_ = type;
 		pimpl->values_ = values;
 		pimpl->isUnicode_ = isUnicode;

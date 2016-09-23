@@ -267,31 +267,32 @@ namespace Ese
 
 	EseColumnData* EseTable::GetColumnData(unsigned int columnIndex) const {
 		auto size = CountColumnValue(columnIndex);
-		vector<vector<unsigned char>> v(size);
-		for (auto i = 0; i < size; i++) {
+		vector<vector<uchar>> v;
+		for (auto i = 1; i <= size; i++) {
 			auto d = pimpl->GetColumnData(columnIndex, i);
 			v.push_back(d);
 		}
 
 		EseType type;
-		switch (pimpl->columns_[columnIndex]->GetType()) {
-		case JET_coltypNil:	type = EseType::Nil;
-		case JET_coltypBit: type = EseType::Bit;
-		case JET_coltypUnsignedByte: type = EseType::UnsignedByte;
-		case JET_coltypShort: type = EseType::Short;
-		case JET_coltypLong: type = EseType::Long;
-		case JET_coltypCurrency: type = EseType::Currency;
-		case JET_coltypIEEESingle: type = EseType::IEEESingle;
-		case JET_coltypIEEEDouble: type = EseType::IEEEDouble;
-		case JET_coltypDateTime:type = EseType::DateTime;
-		case JET_coltypBinary: type = EseType::Binary;
-		case JET_coltypLongBinary:type = EseType::LongBinary;
-		case JET_coltypText: type = EseType::Text;
-		case JET_coltypLongText: type = EseType::LongText;
-		case JET_coltypUnsignedLong:type = EseType::UnsignedLong;
-		case JET_coltypLongLong:type = EseType::LongLong;
-		case JET_coltypGUID:type = EseType::GUID;
-		case JET_coltypUnsignedShort:type = EseType::UnsignedShort;
+		auto rawType = pimpl->columns_[columnIndex]->GetType();
+		switch (rawType) {
+		case JET_coltypNil:	type = EseType::Nil; break;
+		case JET_coltypBit: type = EseType::Bit; break;
+		case JET_coltypUnsignedByte: type = EseType::UnsignedByte; break;
+		case JET_coltypShort: type = EseType::Short; break;
+		case JET_coltypLong: type = EseType::Long; break;
+		case JET_coltypCurrency: type = EseType::Currency; break;
+		case JET_coltypIEEESingle: type = EseType::IEEESingle; break;
+		case JET_coltypIEEEDouble: type = EseType::IEEEDouble; break;
+		case JET_coltypDateTime:type = EseType::DateTime; break;
+		case JET_coltypBinary: type = EseType::Binary; break;
+		case JET_coltypLongBinary:type = EseType::LongBinary; break;
+		case JET_coltypText: type = EseType::Text; break;
+		case JET_coltypLongText: type = EseType::LongText; break;
+		case JET_coltypUnsignedLong:type = EseType::UnsignedLong; break;
+		case JET_coltypLongLong:type = EseType::LongLong; break;
+		case JET_coltypGUID:type = EseType::GUID; break;
+		case JET_coltypUnsignedShort:type = EseType::UnsignedShort; break;
 		default:type = EseType::Nil;
 		}
 

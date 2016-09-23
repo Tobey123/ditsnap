@@ -29,7 +29,10 @@ LRESULT DetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam) {
 	auto n3DEdge = GetSystemMetrics(SM_CXEDGE);
 	detailListView_.InsertColumn(0, L"Name", LVCFMT_LEFT, 100, -1);
 	detailListView_.InsertColumn(1, L"Description", LVCFMT_LEFT, 200, -1);
-	detailListView_.InsertColumn(2, L"Value", LVCFMT_LEFT,
+	detailListView_.InsertColumn(2, L"Type", LVCFMT_LEFT, 200);
+	detailListView_.InsertColumn(3, L"Value", LVCFMT_LEFT,
+	                             rcList.Width() - 300 - nScrollWidth - n3DEdge * 2, -1);
+	detailListView_.InsertColumn(4, L"Intepreted Value", LVCFMT_LEFT,
 	                             rcList.Width() - 300 - nScrollWidth - n3DEdge * 2, -1);
 	checkBox_.SetCheck(1);
 
@@ -78,12 +81,12 @@ void DetailDialog::SetupListItems() {
 			auto adName = parent_->GetAdNameFromColumnName(columnName);
 			if (0 == columnValues.size()) {
 				if (!filterNoValue) {
-					AddRow(visibleColumnIndex, columnName, adName, L"<not set>");
+					AddRow(visibleColumnIndex, columnName, adName, L"na", L"<not set>", L"na");
 					++visibleColumnIndex;
 				}
 			}
 			else {
-				AddRow(visibleColumnIndex, columnName, adName, columnValues);
+				AddRow(visibleColumnIndex, columnName, adName, L"na", columnValues, L"na");
 				++visibleColumnIndex;
 			}
 		}
@@ -93,10 +96,12 @@ void DetailDialog::SetupListItems() {
 	}
 }
 
-void DetailDialog::AddRow(int index, wstring col1, wstring col2, wstring col3) {
-	detailListView_.AddItem(index, 0, col1.c_str());
-	detailListView_.AddItem(index, 1, col2.c_str());
-	detailListView_.AddItem(index, 2, col3.c_str());
+void DetailDialog::AddRow(int index, wstring name, wstring desc, wstring type, wstring value, wstring intepreted) {
+	detailListView_.AddItem(index, 0, name.c_str());
+	detailListView_.AddItem(index, 1, desc.c_str());
+	detailListView_.AddItem(index, 2, type.c_str());
+	detailListView_.AddItem(index, 3, value.c_str());
+	detailListView_.AddItem(index, 4, intepreted.c_str());
 }
 
 wstring DetailDialog::GetColumnValueString(uint columnIndex) const {

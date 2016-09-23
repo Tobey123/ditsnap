@@ -54,21 +54,14 @@ void TableListView::LoadTable() {
 		eseDbManager_->MoveFirstRecord();
 		do {
 			for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex) {
-/*				auto coldata = eseDbManager_->GetColumnData(columnIndex);
+				auto coldata = eseDbManager_->GetColumnData(columnIndex);
 				auto colStrings = coldata->GetValuesAsString();
-				wstring columnValues;
-				for (auto i = 0; i < colStrings.size(); ++i) {
-					columnValues += colStrings[i];
-					if (i != colStrings.size()) {
-						columnValues += L"; ";
-					}
-				}
-
+				auto columnValues = JoinString(colStrings, L"; ");
 				if (columnValues.empty()) {
 					columnValues = NOT_SET;
 				}
 
-				AddItem(rowIndex, columnIndex, columnValues.c_str())*/;
+				AddItem(rowIndex, columnIndex, columnValues.c_str());
 			}
 			++rowIndex;
 		}

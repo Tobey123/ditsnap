@@ -3,6 +3,7 @@
 
 namespace Ese
 {
+	class EseColumnData;
 	class EseTable;
 }
 
@@ -41,7 +42,8 @@ private:
 	void SetupTopLabel() const;
 	void SetupListItems();
 	wstring GetColumnValueString(uint columnIndex) const;
-	void AddRow(int index, wstring name, wstring desc, wstring type, wstring value, wstring intepreted);
+	void AddRow(int index, wstring name, wstring desc, wstring type, wstring value, wstring intepreted = L"");
+	wstring Interpret(Ese::EseColumnData* colData, wstring adName) const;
 
 	DISALLOW_COPY_AND_ASSIGN(DetailDialog);
 };

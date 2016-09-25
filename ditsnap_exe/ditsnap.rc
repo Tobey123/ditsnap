@@ -24,15 +24,15 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Dialog
 //
 
-IDD_DETAIL_DIALOG DIALOGEX 0, 0, 417, 268
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_DETAIL_DIALOG DIALOGEX 0, 0, 614, 269
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Detail"
 FONT 8, "Segoe UI", 400, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,39,403,202
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,39,600,202
     CONTROL         "Show only rows that have &values",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,22,122,10
     LTEXT           "RDN",IDC_RDN,7,7,214,8,SS_NOPREFIX | SS_ENDELLIPSIS
-    PUSHBUTTON      "Copy All",IDC_BUTTON_COPYALL,348,247,50,14
+    PUSHBUTTON      "Copy All",IDC_BUTTON_COPYALL,348,248,50,14
 END
 
 IDD_SCWIZARD1 DIALOGEX 0, 0, 278, 155
@@ -103,9 +103,9 @@ BEGIN
     IDD_DETAIL_DIALOG, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 410
+        RIGHTMARGIN, 607
         TOPMARGIN, 7
-        BOTTOMMARGIN, 261
+        BOTTOMMARGIN, 262
     END
 
     IDD_SCWIZARD1, DIALOG
@@ -143,7 +143,9 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\ditsnap.ico"
+
 IDI_ICON1               ICON                    "res\\icon1.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -151,6 +153,7 @@ IDI_ICON1               ICON                    "res\\icon1.ico"
 //
 
 IDB_BITMAP1             BITMAP                  "res\\databaseAndTable.bmp"
+
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -265,6 +268,17 @@ BEGIN
     BEGIN
         VALUE "Translation", 0x409, 1200
     END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_DETAIL_DIALOG AFX_DIALOG_LAYOUT
+BEGIN
+    0
 END
 
 

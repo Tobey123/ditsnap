@@ -3,6 +3,7 @@
 #include "TableListView.h"
 #include "util.h"
 #include "EseDbManager.h"
+#include "../EseDataAccess/EseDataAccess.h"
 
 using namespace Ese;
 
@@ -15,25 +16,21 @@ DetailDialog::~DetailDialog() {}
 LRESULT DetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam) {
 	CenterWindow();
 	auto hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
-	                                           GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON));
+	                              GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON));
 	SetIcon(hIcon, TRUE);
 	auto hIconSmall = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
-	                                                GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+	                                   GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 	SetIcon(hIconSmall, FALSE);
 	detailListView_ = GetDlgItem(IDC_LIST1);
 	checkBox_ = GetDlgItem(IDC_CHECK1);
 	detailListView_.SetExtendedListViewStyle(LVS_EX_INFOTIP | LVS_EX_FULLROWSELECT);
 	CRect rcList;
 	detailListView_.GetWindowRect(rcList);
-	auto nScrollWidth = GetSystemMetrics(SM_CXVSCROLL);
-	auto n3DEdge = GetSystemMetrics(SM_CXEDGE);
-	detailListView_.InsertColumn(0, L"Name", LVCFMT_LEFT, 100, -1);
-	detailListView_.InsertColumn(1, L"Description", LVCFMT_LEFT, 200, -1);
-	detailListView_.InsertColumn(2, L"Type", LVCFMT_LEFT, 200);
-	detailListView_.InsertColumn(3, L"Value", LVCFMT_LEFT,
-	                             rcList.Width() - 300 - nScrollWidth - n3DEdge * 2, -1);
-	detailListView_.InsertColumn(4, L"Intepreted Value", LVCFMT_LEFT,
-	                             rcList.Width() - 300 - nScrollWidth - n3DEdge * 2, -1);
+	detailListView_.InsertColumn(0, L"Name", LVCFMT_LEFT, 100);
+	detailListView_.InsertColumn(1, L"Description", LVCFMT_LEFT, 200);
+	detailListView_.InsertColumn(2, L"Type", LVCFMT_LEFT, 100);
+	detailListView_.InsertColumn(3, L"Value", LVCFMT_LEFT, 200);
+	detailListView_.InsertColumn(4, L"Intepreted Value", LVCFMT_LEFT, 200);
 	checkBox_.SetCheck(1);
 
 	try {
@@ -59,7 +56,6 @@ void DetailDialog::OnShowAllCheckBoxToggled(UINT uNotifyCode, int nID, CWindow w
 void DetailDialog::SetupTopLabel() const {
 	auto RDN = parent_->GetColumnIdFromColumnName(L"ATTm589825");
 	auto rdnLabel = GetDlgItem(IDC_RDN);
-
 	try {
 		auto rdn = eseDbManager_->RetrieveColumnDataAsString(RDN);
 		rdnLabel.SetWindowTextW(rdn.c_str());
@@ -72,21 +68,24 @@ void DetailDialog::SetupTopLabel() const {
 void DetailDialog::SetupListItems() {
 	try {
 		detailListView_.DeleteAllItems();
-		auto filterNoValue = !!(checkBox_.GetCheck());
+		auto filterNoValue = !!checkBox_.GetCheck();
 		auto visibleColumnIndex = 0;
 		auto nColumn = eseDbManager_->GetColumnCount();
 		for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex) {
-			auto columnValues = GetColumnValueString(columnIndex);
 			auto columnName = eseDbManager_->GetColumnName(columnIndex);
 			auto adName = parent_->GetAdNameFromColumnName(columnName);
-			if (0 == columnValues.size()) {
+			auto colData = eseDbManager_->GetColumnData(columnIndex);
+			auto value = JoinString(colData->GetValuesAsString(), L"; ");
+			auto type = colData->GetColumnTypeString();
+			auto interpreted = Interpret(colData, adName);
+			if (0 == value.size()) {
 				if (!filterNoValue) {
-					AddRow(visibleColumnIndex, columnName, adName, L"na", L"<not set>", L"na");
+					AddRow(visibleColumnIndex, columnName, adName, type, L"<not set>", interpreted);
 					++visibleColumnIndex;
 				}
 			}
 			else {
-				AddRow(visibleColumnIndex, columnName, adName, L"na", columnValues, L"na");
+				AddRow(visibleColumnIndex, columnName, adName, type, value, interpreted);
 				++visibleColumnIndex;
 			}
 		}
@@ -104,18 +103,30 @@ void DetailDialog::AddRow(int index, wstring name, wstring desc, wstring type, w
 	detailListView_.AddItem(index, 4, intepreted.c_str());
 }
 
-wstring DetailDialog::GetColumnValueString(uint columnIndex) const {
-	wstring columnValues;
-	auto numberOfColumnValue = eseDbManager_->CountColumnValue(columnIndex);
-	for (auto itagSequence = 1; itagSequence <= numberOfColumnValue; ++itagSequence) {
-		auto columnValue = eseDbManager_->RetrieveColumnDataAsString(columnIndex, itagSequence);
-		columnValues += columnValue;
-		if (numberOfColumnValue != itagSequence) {
-			columnValues += L"; ";
+wstring DetailDialog::Interpret(EseColumnData* colData, wstring adName) const {
+	auto shortFtType = vector<wstring>{ L"WHEN_CREATED", L"WHEN_CHANGED" };
+	auto ftType = vector<wstring>{ L"PWD_LAST_SET", L"LAST_LOGON", L"LAST_LOGOFF", L"ACCOUNT_EXPIRES" };
+	auto interpreted = wstring(L"");
+	auto vd = colData->GetValues();
+	if (vd.size() == 0) {
+		return interpreted;
+	}
+
+	if (find(shortFtType.begin(), shortFtType.end(), adName) != shortFtType.end()) {
+		auto ll = *reinterpret_cast<long long*>(vd[0].data());
+		interpreted = FileTimeToString(ll * 10000000);
+	}
+	else if (find(ftType.begin(), ftType.end(), adName) != ftType.end()) {
+		auto ll = *reinterpret_cast<long long*>(vd[0].data());
+		interpreted = FileTimeToString(ll);
+	} else if (adName.find(L"GUID") != string::npos) {
+		for (auto& d : vd) {
+			auto guidString = BytesToGuidString(d);
+			interpreted += guidString;
 		}
 	}
 
-	return columnValues;
+	return interpreted;
 }
 
 LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow wndCtl) {

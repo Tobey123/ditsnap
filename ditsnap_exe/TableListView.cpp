@@ -99,6 +99,11 @@ void TableListView::LoadDatatable() {
 			auto dntbin = eseRepository_->GetColumnData(columnMap_[L"DNT_col"])->GetValues();
 			auto dnt = *reinterpret_cast<int*>(dntbin[0].data());
 			dntRdnMap_.insert(pair<int, wstring>(dnt, rdn));
+			auto governIdbin = eseRepository_->GetColumnData(columnMap_[L"ATTc131094"])->GetValues();
+			if (governIdbin.size() > 0) {
+				auto governId = *reinterpret_cast<int*>(governIdbin[0].data());
+				governsIdRdnMap_.insert(pair<int, wstring>(governId, rdn));
+			}
 		}
 		while (eseRepository_->MoveNextRecord());
 	}
@@ -194,6 +199,10 @@ int TableListView::GetColumnIdFromColumnName(wstring columnName) {
 
 wstring TableListView::GetRdnFromDnt(int dnt) {
 	return dntRdnMap_[dnt];
+}
+
+wstring TableListView::GetRdnFromGovernId(int governId) {
+	return governsIdRdnMap_[governId];
 }
 
 void TableListView::LoadEseTable() {

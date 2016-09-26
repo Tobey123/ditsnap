@@ -2,7 +2,7 @@
 
 void ShowMessageBox(const char* message);
 void ShowMessageBox(const wchar_t* message);
-wstring JoinString(vector<wstring> vs, wstring separator = L";");
+wstring JoinString(vector<wstring> vs, wstring separator = L"; ");
 wstring FileTimeToString(long long int ft);
 wstring BytesToGuidString(vector<uchar> bytes);
 wstring GetFlagString(int flag, map<wstring, int> flagMap);

@@ -36,6 +36,7 @@ public:
 	wstring GetAdNameFromColumnName(wstring columnName);
 	int GetColumnIdFromColumnName(wstring columnName);
 	wstring GetRdnFromDnt(int dnt);
+	wstring GetRdnFromGovernId(int governId);
 	void LoadEseTable() override;
 	void LoadEseRepository() override;
 
@@ -45,6 +46,7 @@ private:
 	map<wstring, wstring> adNameMap_;
 	map<int, int> listItemIdToEseRowIndex_;
 	map<int, wstring> dntRdnMap_;
+	map<int, wstring> governsIdRdnMap_;
 	EseRepository* eseRepository_;
 
 	wstring GetColumnData(wstring columnName);

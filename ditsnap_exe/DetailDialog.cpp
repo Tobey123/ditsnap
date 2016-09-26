@@ -75,7 +75,7 @@ void DetailDialog::SetupListItems() {
 			auto columnName = eseRepository_->GetColumnName(columnIndex);
 			auto adName = parent_->GetAdNameFromColumnName(columnName);
 			auto colData = eseRepository_->GetColumnData(columnIndex);
-			auto value = JoinString(colData->GetValuesAsString(), L"; ");
+			auto value = JoinString(colData->GetValuesAsString());
 			auto type = colData->GetColumnTypeString();
 			auto interpreted = Interpret(colData.get(), adName);
 			if (0 == value.size()) {
@@ -139,6 +139,13 @@ wstring DetailDialog::Interpret(EseColumnData* colData, wstring adName) const {
 	} else if (adName == L"OBJECT_CATEGORY") {
 		auto i = *reinterpret_cast<int*>(vd[0].data());
 		interpreted = parent_->GetRdnFromDnt(i);
+	} else if (adName == L"OBJECT_CLASS") {
+		vector<wstring> classes;
+		for (auto& iter : vd) {
+			auto i = *reinterpret_cast<int*>(iter.data());
+			classes.push_back(parent_->GetRdnFromGovernId(i));
+		}
+		interpreted = JoinString(classes);
 	}
 
 	return interpreted;

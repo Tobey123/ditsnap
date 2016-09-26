@@ -20,7 +20,7 @@ namespace Ese
 		ushort GetCodePage(const JET_COLUMNLIST& columnList) const;
 		EseColumn* GetColumnDefinition(const JET_COLUMNLIST& columnList) const;
 		vector<byte> GetColumnData(uint columnIndex, uint itagSequence);
-		int CountColumnValue(unsigned int columnIndex) const;
+		int CountColumnValue(uint columnIndex) const;
 		std::shared_ptr<spdlog::logger> log_;
 
 		DISALLOW_COPY_AND_ASSIGN(EseTable::Impl);

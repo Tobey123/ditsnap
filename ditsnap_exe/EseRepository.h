@@ -10,11 +10,11 @@ namespace Ese
 	class EseColumnData;
 }
 
-class EseDbManager :public ITableObservable, IDbObservable
+class EseRepository :public ITableObservable, IDbObservable
 {
 public:
-	EseDbManager();
-	~EseDbManager();
+	EseRepository();
+	~EseRepository();
 
 	void RegisterTableObserver(ITableObserver* o) override;
 	void RemoveTableObserver(ITableObserver* o) override;
@@ -30,11 +30,10 @@ public:
 	void MoveFirstRecord() const;
 	BOOL MoveNextRecord() const;
 	void Move(uint rowIndex) const;
-	wstring RetrieveColumnDataAsString(uint columnIndex, uint itagSequence = 1) const;
+	wstring GetColumnDataAsString(uint columnIndex) const;
 	uint GetColumnCount() const;
 	wstring GetColumnName(uint columnIndex) const;
-	int CountColumnValue(uint columnIndex) const;
-	Ese::EseColumnData* GetColumnData(uint columnIndex) const;
+	unique_ptr<Ese::EseColumnData> GetColumnData(uint columnIndex) const;
 
 private:
 	list<ITableObserver*> tableObservers_;
@@ -48,5 +47,5 @@ private:
 
 	void CleanupEse();
 
-	DISALLOW_COPY_AND_ASSIGN(EseDbManager);
+	DISALLOW_COPY_AND_ASSIGN(EseRepository);
 };

@@ -2,14 +2,14 @@
 #include "DetailDialog.h"
 #include "TableListView.h"
 #include "util.h"
-#include "EseDbManager.h"
+#include "EseRepository.h"
 #include "../EseDataAccess/EseDataAccess.h"
 
 using namespace Ese;
 
-DetailDialog::DetailDialog(EseDbManager* eseDbManager,
+DetailDialog::DetailDialog(EseRepository* eseRepository,
                            TableListView* parent,
-                           int rowIndex) : m_bMsgHandled(0), eseDbManager_(eseDbManager), parent_(parent), rowIndex_(rowIndex) {}
+                           int rowIndex) : m_bMsgHandled(0), eseRepository_(eseRepository), parent_(parent), rowIndex_(rowIndex) {}
 
 DetailDialog::~DetailDialog() {}
 
@@ -34,7 +34,7 @@ LRESULT DetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam) {
 	checkBox_.SetCheck(1);
 
 	try {
-		eseDbManager_->Move(rowIndex_);
+		eseRepository_->Move(rowIndex_);
 	}
 	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
@@ -57,7 +57,7 @@ void DetailDialog::SetupTopLabel() const {
 	auto RDN = parent_->GetColumnIdFromColumnName(L"ATTm589825");
 	auto rdnLabel = GetDlgItem(IDC_RDN);
 	try {
-		auto rdn = eseDbManager_->RetrieveColumnDataAsString(RDN);
+		auto rdn = eseRepository_->GetColumnDataAsString(RDN);
 		rdnLabel.SetWindowTextW(rdn.c_str());
 	}
 	catch (runtime_error& e) {
@@ -70,14 +70,14 @@ void DetailDialog::SetupListItems() {
 		detailListView_.DeleteAllItems();
 		auto filterNoValue = !!checkBox_.GetCheck();
 		auto visibleColumnIndex = 0;
-		auto nColumn = eseDbManager_->GetColumnCount();
+		auto nColumn = eseRepository_->GetColumnCount();
 		for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex) {
-			auto columnName = eseDbManager_->GetColumnName(columnIndex);
+			auto columnName = eseRepository_->GetColumnName(columnIndex);
 			auto adName = parent_->GetAdNameFromColumnName(columnName);
-			auto colData = eseDbManager_->GetColumnData(columnIndex);
+			auto colData = eseRepository_->GetColumnData(columnIndex);
 			auto value = JoinString(colData->GetValuesAsString(), L"; ");
 			auto type = colData->GetColumnTypeString();
-			auto interpreted = Interpret(colData, adName);
+			auto interpreted = Interpret(colData.get(), adName);
 			if (0 == value.size()) {
 				if (!filterNoValue) {
 					AddRow(visibleColumnIndex, columnName, adName, type, L"<not set>", interpreted);
@@ -124,6 +124,21 @@ wstring DetailDialog::Interpret(EseColumnData* colData, wstring adName) const {
 			auto guidString = BytesToGuidString(d);
 			interpreted += guidString;
 		}
+	} else if (adName == L"USER_ACCOUNT_CONTROL") {
+		auto i = *reinterpret_cast<int*>(vd[0].data());
+		interpreted = GetUserFlagString(i);
+	} else if (adName == L"SAM_ACCOUNT_TYPE") {
+		auto i = *reinterpret_cast<int*>(vd[0].data());
+		interpreted = GetSamAccountTypeString(i);
+	} else if (adName == L"SYSTEM_FLAGS") {
+		auto i = *reinterpret_cast<int*>(vd[0].data());
+		interpreted = GetSystemFlagString(i);
+	} else if (adName == L"SEARCH_FLAGS") {
+		auto i = *reinterpret_cast<int*>(vd[0].data());
+		interpreted = GetSearchFlagString(i);
+	} else if (adName == L"OBJECT_CATEGORY") {
+		auto i = *reinterpret_cast<int*>(vd[0].data());
+		interpreted = parent_->GetRdnFromDnt(i);
 	}
 
 	return interpreted;

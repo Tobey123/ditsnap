@@ -20,6 +20,7 @@ namespace Ese
 		ushort GetCodePage(const JET_COLUMNLIST& columnList) const;
 		EseColumn* GetColumnDefinition(const JET_COLUMNLIST& columnList) const;
 		vector<byte> GetColumnData(uint columnIndex, uint itagSequence);
+		int CountColumnValue(unsigned int columnIndex) const;
 		std::shared_ptr<spdlog::logger> log_;
 
 		DISALLOW_COPY_AND_ASSIGN(EseTable::Impl);
@@ -165,95 +166,15 @@ namespace Ese
 		return buf;
 	}
 
-	int EseTable::CountColumnValue(uint columnIndex) const {
+	int EseTable::Impl::CountColumnValue(uint columnIndex) const {
 		JET_RETRIEVECOLUMN retrieveColumn{0};
-		retrieveColumn.columnid = pimpl->columns_[columnIndex]->GetId();
-		auto jeterr = JetRetrieveColumns(pimpl->sessionId_, pimpl->tableId_, &retrieveColumn, 1);
+		retrieveColumn.columnid = columns_[columnIndex]->GetId();
+		auto jeterr = JetRetrieveColumns(sessionId_, tableId_, &retrieveColumn, 1);
 		if (JET_errSuccess != jeterr && JET_wrnBufferTruncated != jeterr) {
 			throw runtime_error(GetJetErrorMessage(jeterr));
 		}
 
 		return retrieveColumn.itagSequence;
-	}
-
-	wstring EseTable::RetrieveColumnDataAsString(uint columnIndex, uint itagSequence) const {
-		pimpl->log_->debug("Retrieving column data at index {}, itag {}...", columnIndex, itagSequence);
-		auto v = pimpl->GetColumnData(columnIndex, itagSequence);
-		if (v.size() == 0) {
-			return wstring(L"");
-		}
-
-		switch (pimpl->columns_[columnIndex]->GetType()) {
-		case JET_coltypNil:
-			return wstring(L"");
-
-		case JET_coltypBit: /* True or False, Never NULL */
-			return to_wstring(*reinterpret_cast<int*>(v.data()));
-
-		case JET_coltypUnsignedByte: /* 1-byte integer, unsigned */
-			return to_wstring(*reinterpret_cast<uint*>(v.data()));
-
-		case JET_coltypShort: /* 2-byte integer, signed */
-			return to_wstring(*reinterpret_cast<int*>(v.data()));
-
-		case JET_coltypLong: /* 4-byte integer, signed */
-			return to_wstring(*reinterpret_cast<long*>(v.data()));
-
-		case JET_coltypCurrency: /* 8 byte integer, signed */
-			return to_wstring(*reinterpret_cast<long long int*>(v.data()));
-
-		case JET_coltypIEEESingle: /* 4-byte IEEE single precision */
-			return to_wstring(*reinterpret_cast<float*>(v.data()));
-
-		case JET_coltypIEEEDouble: /* 8-byte IEEE double precision */
-			return to_wstring(*reinterpret_cast<double*>(v.data()));
-
-		case JET_coltypDateTime:
-			{/* This column type is identical to the variant date type.*/
-				SYSTEMTIME st{};
-				VariantTimeToSystemTime(*reinterpret_cast<double*>(v.data()), &st);
-				std::wstringstream ss;
-				ss << st.wYear << L"-"
-					<< std::setw(2) << std::setfill(L'0') << st.wMonth << L"-"
-					<< std::setw(2) << std::setfill(L'0') << st.wDay << L" "
-					<< std::setw(2) << std::setfill(L'0') << st.wHour << L":"
-					<< std::setw(2) << std::setfill(L'0') << st.wMinute << L":"
-					<< std::setw(2) << std::setfill(L'0') << st.wSecond << L"."
-					<< std::setw(3) << std::setfill(L'0') << st.wMilliseconds;
-				return ss.str();
-			}
-		case JET_coltypBinary: /* Binary data, < 255 bytes */
-		case JET_coltypLongBinary: /* Binary data, long value */
-			{
-				std::wstringstream ss;
-				for (auto& c : v) {
-					ss << std::setfill(L'0') << std::setw(2);
-					ss << std::uppercase << std::hex << static_cast<uchar>(c) << L" ";
-				}
-				return ss.str();
-			}
-		case JET_coltypText: /* ANSI text, case insensitive, < 255 bytes */
-		case JET_coltypLongText: /* ANSI text, long value  */
-			{
-				if (pimpl->columns_[columnIndex]->IsUnicode()) {
-					// Ensure L'\0' terminated
-					v.push_back(0);
-					v.push_back(0);
-					return wstring{reinterpret_cast<wchar_t*>(v.data())};
-				}
-				return wstring(v.begin(), v.end());
-			}
-		case JET_coltypUnsignedLong:
-			return to_wstring(*reinterpret_cast<ulong*>(v.data()));
-		case JET_coltypLongLong:
-			return to_wstring(*reinterpret_cast<long long int*>(v.data()));
-		case JET_coltypGUID:
-			return wstring(L"(GUID type)");
-		case JET_coltypUnsignedShort:
-			return to_wstring(*reinterpret_cast<ushort*>(v.data()));
-		default:
-			return wstring(L"unknown type");
-		}
 	}
 
 	uint EseTable::GetColumnCount() const {
@@ -266,7 +187,7 @@ namespace Ese
 	}
 
 	EseColumnData* EseTable::GetColumnData(unsigned int columnIndex) const {
-		auto size = CountColumnValue(columnIndex);
+		auto size = pimpl->CountColumnValue(columnIndex);
 		vector<vector<uchar>> v;
 		for (auto i = 1; i <= size; i++) {
 			auto d = pimpl->GetColumnData(columnIndex, i);

@@ -10,18 +10,17 @@
     <ClCompile Include="DbTreeView.cpp" />
     <ClCompile Include="DetailDialog.cpp" />
     <ClCompile Include="ditsnap.cpp" />
-    <ClCompile Include="EseDbManager.cpp" />
     <ClCompile Include="FilterDialog.cpp" />
     <ClCompile Include="MainFrame.cpp" />
     <ClCompile Include="SnapshotWizard.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="TableListView.cpp" />
     <ClCompile Include="util.cpp" />
+    <ClCompile Include="EseRepository.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DbTreeView.h" />
     <ClInclude Include="DetailDialog.h" />
-    <ClInclude Include="EseDbManager.h" />
     <ClInclude Include="FilterDialog.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="MainFrame.h" />
@@ -31,6 +30,7 @@
     <ClInclude Include="TableListView.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="AboutDialog.h" />
+    <ClInclude Include="EseRepository.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\..\databaseAndTable.bmp">

@@ -1,6 +1,6 @@
 #pragma once
 #include "Interfaces.h"
-#include "EseDbManager.h"
+#include "EseRepository.h"
 
 // Defined in EseDataAccess.h 
 namespace Ese
@@ -20,12 +20,12 @@ public:
 		DEFAULT_REFLECTION_HANDLER()
 		END_MSG_MAP()
 
-	DbTreeView(EseDbManager* eseDbManager);
+	DbTreeView(EseRepository* eseRepository);
 	~DbTreeView(void);
 
 	LRESULT OnTreeDoubleClick(LPNMHDR pnmh) const;
-	virtual void LoadEseDbManager() override;
+	virtual void LoadEseRepository() override;
 
 private:
-	EseDbManager* eseDbManager_;
+	EseRepository* eseRepository_;
 };

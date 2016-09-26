@@ -15,7 +15,7 @@ class IDbObserver
 public:
 	virtual ~IDbObserver() { };
 
-	virtual void LoadEseDbManager() = 0;
+	virtual void LoadEseRepository() = 0;
 };
 
 class ITableObservable

@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "MainFrame.h"
-#include "EseDbManager.h"
+#include "EseRepository.h"
 
 CAppModule _Module;
 
 int Run(LPTSTR /*lpstrCmdLine*/  = nullptr, int nCmdShow = SW_SHOWDEFAULT) {
 	CMessageLoop theLoop;
 	_Module.AddMessageLoop(&theLoop);
-	auto eseDbManager = new EseDbManager();
-	auto wndMain = new MainFrame(eseDbManager);
+	auto eseRepository = new EseRepository();
+	auto wndMain = new MainFrame(eseRepository);
 	if (wndMain->CreateEx() == nullptr) {
 		ATLTRACE(_T("Main window creation failed!\n"));
 		return 0;

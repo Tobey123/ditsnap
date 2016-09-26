@@ -78,7 +78,7 @@ namespace Ese
 		case EseType::Short: /* 2-byte integer, signed */
 			return to_wstring(*reinterpret_cast<int*>(v.data()));
 		case EseType::Long: /* 4-byte integer, signed */
-			return to_wstring(*reinterpret_cast<long*>(v.data()));
+			return to_wstring(*reinterpret_cast<int*>(v.data()));
 		case EseType::Currency: /* 8 byte integer, signed */
 			return to_wstring(*reinterpret_cast<long long int*>(v.data()));
 		case EseType::IEEESingle: /* 4-byte IEEE single precision */

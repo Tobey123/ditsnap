@@ -1,7 +1,7 @@
 #pragma once
 #include "Interfaces.h"
 
-class EseDbManager;
+class EseRepository;
 class DetailDialog;
 
 class TableListView : public CWindowImpl<TableListView, CListViewCtrl>,
@@ -25,7 +25,7 @@ public:
 		DEFAULT_REFLECTION_HANDLER()
 		END_MSG_MAP()
 
-	TableListView(EseDbManager* eseDbManager);
+	TableListView(EseRepository* eseRepository);
 	~TableListView();
 
 	LRESULT OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -35,21 +35,22 @@ public:
 	void FilterTable(int filterFlag);
 	wstring GetAdNameFromColumnName(wstring columnName);
 	int GetColumnIdFromColumnName(wstring columnName);
-	virtual void LoadEseTable() override;
-	virtual void LoadEseDbManager() override;
+	wstring GetRdnFromDnt(int dnt);
+	void LoadEseTable() override;
+	void LoadEseRepository() override;
 
 private:
 	DetailDialog* detailDialog_;
 	map<wstring, int> columnMap_;
 	map<wstring, wstring> adNameMap_;
 	map<int, int> listItemIdToEseRowIndex_;
-	EseDbManager* eseDbManager_;
+	map<int, wstring> dntRdnMap_;
+	EseRepository* eseRepository_;
 
-	wstring RetrieveColumnData(wstring columnName);
+	wstring GetColumnData(wstring columnName);
 	void CleanupTable();
 	void CleanupDetailDialog();
 	void InsertColumnHelper(int nCol, wstring ATT, int nWidth = 200);
-	void AddItemHelper(int nItem, int nSubItem, wstring ATT);
 	bool MapColumnNameToColumnIndex(map<wstring, int>* columnMap) const;
 	void MapColumnNameToAdName(map<wstring, wstring>* pAdNameMap) const;
 

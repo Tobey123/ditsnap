@@ -93,8 +93,6 @@ namespace Ese
 		void MoveFirstRecord() const;
 		bool MoveNextRecord() const;
 		void Move(unsigned int rowIndex) const;
-		int CountColumnValue(unsigned int columnIndex) const;
-		std::wstring RetrieveColumnDataAsString(unsigned int columnIndex, unsigned int itagSequence = 1) const;
 		unsigned int GetColumnCount() const;
 		std::wstring GetColumnName(unsigned int columnIndex) const;
 		EseColumnData* GetColumnData(unsigned int columnIndex) const;

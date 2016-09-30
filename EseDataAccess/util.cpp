@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "EseDataAccess.h"
 #include <spdlog/details/spdlog_impl.h>
 

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "util.h"
 #include "EseDataAccess.h"
 
@@ -28,7 +27,7 @@ namespace Ese
 
 	EseTable::EseTable(const EseDatabase* eseDatabase, string tableName) : pimpl(new Impl) {
 		pimpl->eseDatabase_ = eseDatabase;
-		pimpl->sessionId_ = eseDatabase->GetEseInstance()->GetSessionId();
+		pimpl->sessionId_ = eseDatabase->GetEseInstance().GetSessionId();
 		pimpl->dbId_ = eseDatabase->GetDbId();
 		pimpl->tableName_ = tableName;
 		pimpl->log_ = GetLogger();

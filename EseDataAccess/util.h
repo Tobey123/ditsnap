@@ -1,5 +1,4 @@
 #pragma once
-#include "stdafx.h"
 #include "esent.h"
 #include "spdlog/spdlog.h"
 

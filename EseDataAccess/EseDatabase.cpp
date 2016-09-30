@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "util.h"
 #include "EseDataAccess.h"
 
@@ -7,8 +6,8 @@ namespace Ese
 	class EseDatabase::Impl
 	{
 	public:
-		Impl() {}
-		const EseInstance* eseInstance_{nullptr};
+		explicit Impl(const EseInstance& eseInstance) : eseInstance_(eseInstance) {}
+		const EseInstance& eseInstance_;
 		JET_SESID sessionId_{0};
 		JET_DBID dbId_{0};
 		string dbPath_;
@@ -18,9 +17,8 @@ namespace Ese
 		DISALLOW_COPY_AND_ASSIGN(EseDatabase::Impl);
 	};
 
-	EseDatabase::EseDatabase(const EseInstance* const eseInstance, const string dbPath) : pimpl(new Impl) {
-		pimpl->eseInstance_ = eseInstance;
-		pimpl->sessionId_ = eseInstance->GetSessionId();
+	EseDatabase::EseDatabase(const EseInstance& eseInstance, const string dbPath) : pimpl(new Impl(eseInstance)) {
+		pimpl->sessionId_ = eseInstance.GetSessionId();
 		pimpl->dbId_ = 0;
 		pimpl->dbPath_ = dbPath;
 		pimpl->tableCount_ = -1;
@@ -79,7 +77,7 @@ namespace Ese
 		return tableNames;
 	}
 
-	const EseInstance* EseDatabase::GetEseInstance() const {
+	const EseInstance& EseDatabase::GetEseInstance() const {
 		return pimpl->eseInstance_;
 	}
 

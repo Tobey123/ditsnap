@@ -33,11 +33,11 @@ namespace Ese
 	class EseDatabase
 	{
 	public:
-		EseDatabase(const EseInstance* const parent, std::string dbPath);
+		EseDatabase(const EseInstance& parent, std::string dbPath);
 		~EseDatabase();
 		EseTable* OpenTable(std::wstring tableName) const;
 		std::vector<std::wstring> GetTableNames() const;
-		const EseInstance* GetEseInstance() const;
+		const EseInstance& GetEseInstance() const;
 		JET_DBID GetDbId() const;
 
 	private:

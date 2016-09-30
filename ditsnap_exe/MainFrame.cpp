@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "MainFrame.h"
 #include "SnapshotWizard.h"
 #include "AboutDialog.h"

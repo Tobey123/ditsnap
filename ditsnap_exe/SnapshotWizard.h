@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+
 #include "resource.h"
 
 class SnapshotWizardPage1 : public CPropertyPageImpl<SnapshotWizardPage1>

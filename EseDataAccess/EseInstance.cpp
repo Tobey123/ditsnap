@@ -1,7 +1,5 @@
-#include "stdafx.h"
-#include "util.h"
 #include "EseDataAccess.h"
-#include "spdlog/spdlog.h"
+#include "util.h"
 
 namespace Ese
 {
@@ -43,7 +41,7 @@ namespace Ese
 
 	EseDatabase* EseInstance::OpenDatabase(wstring dbPath) const {
 		pimpl->log_->info("Opening database {}...", wtos(dbPath));
-		return new EseDatabase(this, string(CW2A(dbPath.c_str())));
+		return new EseDatabase(*this, string(CW2A(dbPath.c_str())));
 	}
 
 	JET_INSTANCE EseInstance::GetJetInstance() const {

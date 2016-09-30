@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "SnapshotWizard.h"
 #include "../VssCopy/VssCopy.h"
 #include "util.h"

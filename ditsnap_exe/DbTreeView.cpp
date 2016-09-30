@@ -1,4 +1,3 @@
-#include "StdAfx.h"
 #include "DbTreeView.h"
 #include "../EseDataAccess/EseDataAccess.h"
 #include "resource.h"

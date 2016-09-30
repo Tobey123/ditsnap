@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "TableListView.h"
 #include "DetailDialog.h"
 #include "util.h"

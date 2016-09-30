@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "FilterDialog.h"
 #include "resource.h"
 

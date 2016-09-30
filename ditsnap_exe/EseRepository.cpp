@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+
 #include "EseRepository.h"
 #include "../EseDataAccess/EseDataAccess.h"
 #include "util.h"

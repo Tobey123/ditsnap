@@ -1,5 +1,5 @@
 #include "EseDataAccess.h"
-#include <spdlog/details/spdlog_impl.h>
+#include "EseMetaData.h"
 
 namespace Ese
 {
@@ -29,22 +29,5 @@ namespace Ese
 
 	string wtos(wstring w) {
 		return string(CW2A(w.c_str()));
-	}
-
-	std::shared_ptr<spdlog::logger> GetLogger(string loggerName) {
-		auto logger = spdlog::get(loggerName);
-		if (logger != nullptr) {
-			return logger;
-		}
-
-#ifdef _DEBUG
-		spdlog::set_level(spdlog::level::debug);
-#endif
-		wchar_t fileName[MAX_PATH];
-		GetModuleFileName(nullptr, fileName, MAX_PATH);
-		auto pos = wstring(fileName).find_last_of(L"\\/");
-		auto dirName = wstring(fileName).substr(0, pos);
-		auto logFile = dirName + L"\\ditsnap.log";
-		return spdlog::basic_logger_mt(loggerName, logFile);
 	}
 }

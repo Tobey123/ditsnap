@@ -7,14 +7,14 @@ namespace Ese
 	public:
 		Impl() {}
 		EseType type_{EseType::Nil};
-		vector<vector<uchar>> values_;
+		vector<vector<unsigned char>> values_;
 		bool isUnicode_{false};
-		wstring ConvertToString(vector<uchar> v) const;
+		wstring ConvertToString(vector<unsigned char> v) const;
 
 		DISALLOW_COPY_AND_ASSIGN(EseColumnData::Impl);
 	};
 
-	EseColumnData::EseColumnData(EseType type, vector<vector<uchar>> values, bool isUnicode): pimpl(new Impl) {
+	EseColumnData::EseColumnData(EseType type, vector<vector<unsigned char>> values, bool isUnicode): pimpl(new Impl) {
 		pimpl->type_ = type;
 		pimpl->values_ = values;
 		pimpl->isUnicode_ = isUnicode;
@@ -50,7 +50,7 @@ namespace Ese
 		}
 	}
 
-	vector<vector<uchar>> EseColumnData::GetValues() const {
+	vector<vector<unsigned char>> EseColumnData::GetValues() const {
 		return pimpl->values_;
 	}
 
@@ -62,7 +62,7 @@ namespace Ese
 		return vals;
 	}
 		
-	wstring EseColumnData::Impl::ConvertToString(vector<uchar> v) const {
+	wstring EseColumnData::Impl::ConvertToString(vector<unsigned char> v) const {
 		if (v.size() == 0) {
 			return wstring(L"");
 		}
@@ -73,7 +73,7 @@ namespace Ese
 		case EseType::Bit: /* True or False, Never NULL */
 			return to_wstring(*reinterpret_cast<int*>(v.data()));
 		case EseType::UnsignedByte: /* 1-byte integer, unsigned */
-			return to_wstring(*reinterpret_cast<uint*>(v.data()));
+			return to_wstring(*reinterpret_cast<unsigned int*>(v.data()));
 		case EseType::Short: /* 2-byte integer, signed */
 			return to_wstring(*reinterpret_cast<int*>(v.data()));
 		case EseType::Long: /* 4-byte integer, signed */
@@ -104,7 +104,7 @@ namespace Ese
 			std::wstringstream ss;
 			for (auto& c : v) {
 				ss << std::setfill(L'0') << std::setw(2);
-				ss << std::uppercase << std::hex << static_cast<uchar>(c) << L" ";
+				ss << std::uppercase << std::hex << static_cast<unsigned char>(c) << L" ";
 			}
 			return ss.str();
 		}
@@ -120,13 +120,13 @@ namespace Ese
 			return wstring(v.begin(), v.end());
 		}
 		case EseType::UnsignedLong:
-			return to_wstring(*reinterpret_cast<ulong*>(v.data()));
+			return to_wstring(*reinterpret_cast<unsigned int*>(v.data()));
 		case EseType::LongLong:
 			return to_wstring(*reinterpret_cast<long long int*>(v.data()));
 		case EseType::GUID:
 			return wstring(L"(GUID type)");
 		case EseType::UnsignedShort:
-			return to_wstring(*reinterpret_cast<ushort*>(v.data()));
+			return to_wstring(*reinterpret_cast<unsigned short*>(v.data()));
 		default:
 			return wstring(L"unknown type");
 		}

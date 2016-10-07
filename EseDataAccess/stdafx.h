@@ -17,12 +17,6 @@ using std::to_string;
 using std::to_wstring;
 using std::unique_ptr;
 
-using uchar = unsigned char;
-using ushort = unsigned short;
-using uint = unsigned int;
-using ulong = unsigned long;
-using ulonglong = unsigned long long;;
-
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
 TypeName(const TypeName&);                 \
 void operator=(const TypeName&)

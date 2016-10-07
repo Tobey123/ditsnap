@@ -6,15 +6,15 @@ namespace Ese
 	{
 	public:
 		Impl() {}
-		uint id_{0};
+		unsigned int id_{0};
 		string name_;
-		uint type_{0};
+		unsigned int type_{0};
 		bool isUnicode_{false};
 
 		DISALLOW_COPY_AND_ASSIGN(EseColumn::Impl);
 	};
 
-	EseColumn::EseColumn(uint id, string name, uint type, bool isUnicode) : pimpl(new Impl) {
+	EseColumn::EseColumn(unsigned int id, string name, unsigned int type, bool isUnicode) : pimpl(new Impl) {
 		pimpl->id_ = id;
 		pimpl->name_ = name;
 		pimpl->type_ = type;
@@ -23,7 +23,7 @@ namespace Ese
 
 	EseColumn::~EseColumn() { }
 
-	uint EseColumn::GetId() const {
+	unsigned int EseColumn::GetId() const {
 		return pimpl->id_;
 	}
 
@@ -31,7 +31,7 @@ namespace Ese
 		return pimpl->name_;
 	}
 
-	uint EseColumn::GetType() const {
+	unsigned int EseColumn::GetType() const {
 		return pimpl->type_;
 	}
 

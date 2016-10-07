@@ -1,5 +1,4 @@
 #pragma once
-#include "esent.h"
 #include <string>
 #include <memory>
 #include <vector>
@@ -11,6 +10,7 @@ namespace Ese
 	class EseTable;
 	class EseColumn;
 	class EseColumnData;
+	class EseMetaData;
 	enum class EseType;
 
 	class EseInstance
@@ -19,8 +19,7 @@ namespace Ese
 		explicit EseInstance(unsigned int pageSize = DEFAULT_ESE_PAGE_SIZE);
 		~EseInstance();
 		EseDatabase* OpenDatabase(std::wstring dbPath) const;
-		JET_SESID GetSessionId() const;
-		JET_INSTANCE GetJetInstance() const;
+		EseMetaData* GetMetaData() const;
 		const static unsigned int DEFAULT_ESE_PAGE_SIZE = 8 * 1024;
 
 	private:
@@ -38,7 +37,7 @@ namespace Ese
 		EseTable* OpenTable(std::wstring tableName) const;
 		std::vector<std::wstring> GetTableNames() const;
 		const EseInstance& GetEseInstance() const;
-		JET_DBID GetDbId() const;
+		unsigned long GetDbId() const;
 
 	private:
 		class Impl;
@@ -72,11 +71,11 @@ namespace Ese
 	class EseColumnData
 	{
 	public:
-		EseColumnData(EseType type, std::vector<std::vector<uchar>> values, bool isUnicode);
+		EseColumnData(EseType type, std::vector<std::vector<unsigned char>> values, bool isUnicode);
 		~EseColumnData();
 		EseType GetType() const;
 		std::wstring GetColumnTypeString() const;
-		std::vector<std::vector<uchar>> GetValues() const;
+		std::vector<std::vector<unsigned char>> GetValues() const;
 		std::vector<std::wstring> GetValuesAsString() const;
 	private:
 		class Impl;

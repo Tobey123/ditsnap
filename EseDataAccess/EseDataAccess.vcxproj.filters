@@ -8,11 +8,13 @@
     <ClCompile Include="EseTable.cpp" />
     <ClCompile Include="EseColumn.cpp" />
     <ClCompile Include="EseColumnData.cpp" />
+    <ClCompile Include="EseMetaData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="esent.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="EseDataAccess.h" />
+    <ClInclude Include="EseMetaData.h" />
   </ItemGroup>
 </Project>

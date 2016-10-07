@@ -1,4 +1,5 @@
 #include "EseDataAccess.h"
+#include "EseMetaData.h"
 #include "util.h"
 
 namespace Ese
@@ -9,26 +10,21 @@ namespace Ese
 		Impl() {}
 		JET_INSTANCE jetInstance_{0};
 		JET_SESID sessionId_{0};
-		uint pageSize_{0};
-		std::shared_ptr<spdlog::logger> log_;
+		unsigned int pageSize_{0};
 
 		DISALLOW_COPY_AND_ASSIGN(EseInstance::Impl);
 	};
 
-	EseInstance::EseInstance(uint pageSize) : pimpl(new Impl) {
+	EseInstance::EseInstance(unsigned int pageSize) : pimpl(new Impl) {
 		pimpl->pageSize_ = pageSize;
-		pimpl->log_ = GetLogger();
-		pimpl->log_->info("Starting ESE instance with page size {}...", pageSize);
 		auto instanceName = "ditsnap";
 		ThrowOnError(JetSetSystemParameter(&pimpl->jetInstance_, 0, JET_paramDatabasePageSize, pimpl->pageSize_, nullptr));
 		ThrowOnError(JetCreateInstance(&pimpl->jetInstance_, instanceName));
 		ThrowOnError(JetInit(&pimpl->jetInstance_));
 		ThrowOnError(JetBeginSession(pimpl->jetInstance_, &pimpl->sessionId_, nullptr, nullptr));
-		pimpl->log_->info("Successfully started ESE instance.");
 	}
 
 	EseInstance::~EseInstance() {
-		pimpl->log_->info("Stopping ESE instance...");
 		if (pimpl->sessionId_ != 0) {
 			JetEndSession(pimpl->sessionId_, 0);
 		}
@@ -36,19 +32,14 @@ namespace Ese
 		if (pimpl->jetInstance_ != 0) {
 			JetTerm(pimpl->jetInstance_);
 		}
-		pimpl->log_->info("Stopped ESE instance.");
 	}
 
 	EseDatabase* EseInstance::OpenDatabase(wstring dbPath) const {
-		pimpl->log_->info("Opening database {}...", wtos(dbPath));
 		return new EseDatabase(*this, string(CW2A(dbPath.c_str())));
 	}
 
-	JET_INSTANCE EseInstance::GetJetInstance() const {
-		return pimpl->jetInstance_;
-	}
-
-	JET_SESID EseInstance::GetSessionId() const {
-		return pimpl->sessionId_;
+	EseMetaData* EseInstance::GetMetaData() const
+	{
+		return new EseMetaData(pimpl->sessionId_, pimpl->jetInstance_);
 	}
 }

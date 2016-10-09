@@ -27,7 +27,7 @@ The executable is available here.
 ### Detail Dialog
 <img src="images/screenshot2.png" height="400">
 ## Interpreted Value
-Interpreted Value column in Detail Dialog shows human-readable representaions of raw ESE column values. Here are the exmample.
+Interpreted Value column in Detail Dialog shows human-readable representaions of raw ESE column values. Here are the exmamples.
 #### OBJECT_CATEGORY
 The attribute is stored as a 32-bit integer in ESE, which points to DNT (Distinguished Name Tag) of another Active Directory object. Interpreted Value for the attribute shows RDN (Relative Distinguished Name) of the object.
 #### OBJECT_CLASS

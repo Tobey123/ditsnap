@@ -3,22 +3,6 @@ DIT Snapshot Viewer is an inspection tool for Active Directory database, ntds.di
 
 The tool can extract ntds.dit file without stopping lsass.exe. When Active Directory Service is running, lsass.exe locks the file and does not allow to access to it. The snapshot wizard copies ntds.dit using VSS(Volume Shadow Copy Service) even if the file is exclusively locked. As copying ntds.dit may cause data inconsistency in ESE DB, the wizard automatically runs __esentutil /repair__ command to fix the inconsistency.
 
-EseDataAccess static library can be used for other ESE inspection applications. It has C++ object-oriented representation of ESE C API. For example, ESE table is represented by EseTable class defined as below.
-```C++
-class EseTable
-{
-	public:
-		EseTable(const EseDatabase* const eseDatabase, string tableName);
-		~EseTable();
-		void MoveFirstRecord() const;
-		bool MoveNextRecord() const;
-		void Move(uint rowIndex) const;
-		int CountColumnValue(uint columnIndex) const;
-		wstring RetrieveColumnDataAsString(uint columnIndex, uint itagSequence = 1);
-		uint GetColumnCount() const;
-		wstring GetColumnName(uint columnIndex) const;
-}
-```
 The executable is available here.
 [Download ditsnap.exe](https://github.com/yosqueoy/ditsnap/releases)
 ## Screenshots
@@ -39,3 +23,21 @@ Those attributes are stored as 64-bit integers in ESE, which are treated as [FIL
 #### USER_ACCOUNT_CONTROL
   The attribute is stored as a 32-bit integer in ESE, which are treated as flags that control the behavior of the user account. Interpreted Value for the attribute shows the list of flags.
 See https://msdn.microsoft.com/en-us/library/ms680832(v=vs.85).aspx.
+
+# EseDataAccess static library
+EseDataAccess static library can be used for other ESE inspection applications. EseDataAccess.h contains C++ object-oriented representation of ESE C API. For example, ESE table is represented by EseTable class defined as below.
+```C++
+class EseTable
+{
+	public:
+		EseTable(const EseDatabase* const eseDatabase, string tableName);
+		~EseTable();
+		void MoveFirstRecord() const;
+		bool MoveNextRecord() const;
+		void Move(uint rowIndex) const;
+		int CountColumnValue(uint columnIndex) const;
+		wstring RetrieveColumnDataAsString(uint columnIndex, uint itagSequence = 1);
+		uint GetColumnCount() const;
+		wstring GetColumnName(uint columnIndex) const;
+}
+```

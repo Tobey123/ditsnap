@@ -53,8 +53,8 @@ private:
 	void CleanupTable();
 	void CleanupDetailDialog();
 	void InsertColumnHelper(int nCol, wstring ATT, int nWidth = 200);
-	bool MapColumnNameToColumnIndex(map<wstring, int>* columnMap) const;
-	void MapColumnNameToAdName(map<wstring, wstring>* pAdNameMap) const;
+	bool MapColumnNameToColumnIndex(map<wstring, int>& columnMap) const;
+	void MapColumnNameToAdName(map<wstring, wstring>& adNameMap) const;
 
 	static constexpr const char* PROGRAM_NAME = "Ditsnap";
 	static constexpr const wchar_t* NOT_SET = L"<not set>";

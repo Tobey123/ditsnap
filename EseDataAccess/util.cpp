@@ -3,6 +3,15 @@
 
 namespace Ese
 {
+	wstring to_w(string s) {
+		return wstring(s.begin(), s.end());
+	}
+
+	wstring to_w(const char* s) {
+		string str(s);
+		return to_w(str);
+	}
+
 	string GetJetErrorMessage(JET_ERR err) {
 		auto bufsize = 512;
 		vector<char> buf(bufsize);

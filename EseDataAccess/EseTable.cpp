@@ -169,13 +169,13 @@ namespace Ese
 		return retrieveColumn.itagSequence;
 	}
 
-	unsigned int EseTable::GetColumnCount() const {
-		return static_cast<unsigned int>(pimpl->columns_.size());
-	}
-
-	wstring EseTable::GetColumnName(unsigned int columnIndex) const {
-		auto name = pimpl->columns_[columnIndex]->GetName();
-		return wstring(name.begin(), name.end());
+	std::vector<std::wstring> EseTable::GetColumnNames() const
+	{
+		std::vector<std::wstring> columnNames;
+		for (auto& col : pimpl->columns_) {
+			columnNames.push_back(to_w(col->GetName()));
+		}
+		return columnNames;
 	}
 
 	EseColumnData* EseTable::GetColumnData(unsigned int columnIndex) const {

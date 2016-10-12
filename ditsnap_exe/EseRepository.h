@@ -31,8 +31,7 @@ public:
 	BOOL MoveNextRecord() const;
 	void Move(uint rowIndex) const;
 	wstring GetColumnDataAsString(uint columnIndex) const;
-	uint GetColumnCount() const;
-	wstring GetColumnName(uint columnIndex) const;
+	vector<wstring> GetColumnNames() const;
 	unique_ptr<Ese::EseColumnData> GetColumnData(uint columnIndex) const;
 
 private:

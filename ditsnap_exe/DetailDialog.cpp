@@ -69,11 +69,11 @@ void DetailDialog::SetupListItems() {
 		detailListView_.DeleteAllItems();
 		auto filterNoValue = !!checkBox_.GetCheck();
 		auto visibleColumnIndex = 0;
-		auto nColumn = eseRepository_->GetColumnCount();
-		for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex) {
-			auto columnName = eseRepository_->GetColumnName(columnIndex);
+		auto columnNames = eseRepository_->GetColumnNames();
+		for (auto i = 0; i < columnNames.size(); ++i) {
+			auto columnName = columnNames[i];
 			auto adName = parent_->GetAdNameFromColumnName(columnName);
-			auto colData = eseRepository_->GetColumnData(columnIndex);
+			auto colData = eseRepository_->GetColumnData(i);
 			auto value = JoinString(colData->GetValuesAsString());
 			auto type = colData->GetColumnTypeString();
 			auto interpreted = Interpret(colData.get(), adName);

@@ -41,11 +41,6 @@ using std::runtime_error;
 using std::unique_ptr;
 using std::make_unique;
 
-inline wstring to_w(const char* s) {
-	string str(s);
-	return wstring(str.begin(), str.end());
-}
-
 using uchar = unsigned char;
 using ushort = unsigned short;
 using uint = unsigned int;

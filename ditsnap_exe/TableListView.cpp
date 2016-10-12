@@ -44,22 +44,21 @@ LRESULT TableListView::OnListDoubleClick(LPNMHDR pnmh) {
 void TableListView::LoadTable() {
 	const auto nWidth = 70;
 	try {
-		auto nColumn = eseRepository_->GetColumnCount();
-		for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex) {
-			auto columnName = eseRepository_->GetColumnName(columnIndex);
-			InsertColumn(columnIndex, columnName.c_str(), LVCFMT_LEFT, nWidth);
+		auto columnNames = eseRepository_->GetColumnNames();
+		for (auto i = 0; i < columnNames.size(); ++i) {
+			InsertColumn(i, columnNames[i].c_str(), LVCFMT_LEFT, nWidth);
 		}
 
 		auto rowIndex = 0;
 		eseRepository_->MoveFirstRecord();
 		do {
-			for (uint columnIndex = 0; columnIndex < nColumn; ++columnIndex) {
-				auto columnValues = eseRepository_->GetColumnDataAsString(columnIndex);
+			for (auto i = 0; i < columnNames.size(); ++i) {
+				auto columnValues = eseRepository_->GetColumnDataAsString(i);
 				if (columnValues.empty()) {
 					columnValues = NOT_SET;
 				}
 
-				AddItem(rowIndex, columnIndex, columnValues.c_str());
+				AddItem(rowIndex, i, columnValues.c_str());
 			}
 			++rowIndex;
 		}
@@ -75,8 +74,8 @@ void TableListView::LoadDatatable() {
 	adNameMap_.clear();
 	dntRdnMap_.clear();
 	listItemIdToEseRowIndex_.clear();
-	MapColumnNameToColumnIndex(&columnMap_);
-	MapColumnNameToAdName(&adNameMap_);
+	MapColumnNameToColumnIndex(columnMap_);
+	MapColumnNameToAdName(adNameMap_);
 	vector<wstring> headerColumnNames{L"ATTm589825", L"DNT_col", L"PDNT_col", L"cnt_col",
 		L"OBJ_col", L"RDNtyp_col", L"NCDNT_col", L"ATTb590606"};
 	try {
@@ -257,11 +256,11 @@ wstring TableListView::GetColumnData(wstring columnName) {
 	return eseRepository_->GetColumnDataAsString(columnMap_[columnName]);
 }
 
-bool TableListView::MapColumnNameToColumnIndex(map<wstring, int>* pColumnMap) const {
+bool TableListView::MapColumnNameToColumnIndex(map<wstring, int>& columnMap) const {
 	try {
-		for (uint columnIndex = 0; columnIndex < eseRepository_->GetColumnCount(); ++columnIndex) {
-			auto columnName(eseRepository_->GetColumnName(columnIndex));
-			pColumnMap->insert(pair<wstring, int>(wstring(columnName), columnIndex));
+		auto columnNames = eseRepository_->GetColumnNames();
+		for (auto i = 0; i < columnNames.size(); ++i) {
+			columnMap[columnNames[i]] = i;
 		}
 	}
 	catch (runtime_error& e) {
@@ -271,9 +270,9 @@ bool TableListView::MapColumnNameToColumnIndex(map<wstring, int>* pColumnMap) co
 	return true;
 }
 
-void TableListView::MapColumnNameToAdName(map<wstring, wstring>* pAdNameMap) const {
-	auto insert = [pAdNameMap](wchar_t* k, wchar_t* v) {
-			pAdNameMap->insert(pair<wstring, wstring>(k, v));
+void TableListView::MapColumnNameToAdName(map<wstring, wstring>& adNameMap) const {
+	auto insert = [&adNameMap](wchar_t* k, wchar_t* v) {
+			adNameMap.insert(pair<wstring, wstring>(k, v));
 		};
 	insert(L"ATTq589983", L"ACCOUNT_EXPIRES");
 	insert(L"ATTm591131", L"ACCOUNT_NAME_HISTORY");

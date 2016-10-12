@@ -1,7 +1,15 @@
-
 #include "util.h"
 #include <iomanip>
 #include <sstream>
+
+wstring to_w(string s) {
+	return wstring(s.begin(), s.end());
+}
+
+wstring to_w(const char* s) {
+	string str(s);
+	return to_w(str);
+}
 
 void ShowMessageBox(const char* message) {
 	MessageBoxA(nullptr, message, "Ditsnap", MB_ICONWARNING | MB_OK);

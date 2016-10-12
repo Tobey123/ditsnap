@@ -85,12 +85,9 @@ wstring EseRepository::GetColumnDataAsString(uint columnIndex) const {
 	return JoinString(colData->GetValuesAsString());
 }
 
-uint EseRepository::GetColumnCount() const {
-	return eseTable_->GetColumnCount();
-}
-
-wstring EseRepository::GetColumnName(uint columnIndex) const {
-	return eseTable_->GetColumnName(columnIndex);
+vector<wstring> EseRepository::GetColumnNames() const
+{
+	return eseTable_->GetColumnNames();
 }
 
 unique_ptr<EseColumnData> EseRepository::GetColumnData(uint columnIndex) const {

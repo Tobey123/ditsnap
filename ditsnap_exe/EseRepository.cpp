@@ -95,10 +95,10 @@ unique_ptr<EseColumnData> EseRepository::GetColumnData(uint columnIndex) const {
 }
 
 void EseRepository::CleanupEse() {
-	delete eseInstance_;
-	eseInstance_ = nullptr;
-	delete eseDatabase_;
-	eseDatabase_ = nullptr;
 	delete eseTable_;
 	eseTable_ = nullptr;
+	delete eseDatabase_;
+	eseDatabase_ = nullptr;
+	delete eseInstance_;
+	eseInstance_ = nullptr;
 }

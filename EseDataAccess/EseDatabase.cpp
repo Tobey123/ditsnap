@@ -32,7 +32,7 @@ namespace Ese
 			JetCloseDatabase(pimpl->sessionId_, pimpl->dbId_, 0);
 		}
 
-		JetDetachDatabase(pimpl->sessionId_, pimpl->dbPath_.c_str());
+		JetDetachDatabase(pimpl->sessionId_, 0);
 	}
 
 	EseTable* EseDatabase::OpenTable(wstring tableName) const {

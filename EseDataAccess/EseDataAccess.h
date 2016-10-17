@@ -13,6 +13,9 @@ namespace Ese
 	class EseMetaData;
 	enum class EseType;
 
+	using Byte = uint8_t;
+	using ByteArray = std::vector<std::uint8_t>;
+	
 	class EseInstance
 	{
 	public:
@@ -68,14 +71,15 @@ namespace Ese
 		UnsignedShort
 	};
 
+	std::wstring ToString(EseType eseType);
+
 	class EseColumnData
 	{
 	public:
-		EseColumnData(EseType type, std::vector<std::vector<unsigned char>> values, bool isUnicode);
+		EseColumnData(EseType type, std::vector<ByteArray> values, bool isUnicode);
 		~EseColumnData();
 		EseType GetType() const;
-		std::wstring GetColumnTypeString() const;
-		std::vector<std::vector<unsigned char>> GetValues() const;
+		std::vector<ByteArray> GetValues() const;
 		std::vector<std::wstring> GetValuesAsString() const;
 	private:
 		class Impl;

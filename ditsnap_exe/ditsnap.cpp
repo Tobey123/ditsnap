@@ -16,6 +16,8 @@ int Run(LPTSTR /*lpstrCmdLine*/  = nullptr, int nCmdShow = SW_SHOWDEFAULT) {
 
 	wndMain->ShowWindow(nCmdShow);
 	auto nRet = theLoop.Run();
+	delete wndMain;
+	delete eseRepository;
 	_Module.RemoveMessageLoop();
 	return nRet;
 }

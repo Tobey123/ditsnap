@@ -9,6 +9,7 @@
     <ClCompile Include="EseColumn.cpp" />
     <ClCompile Include="EseColumnData.cpp" />
     <ClCompile Include="EseMetaData.cpp" />
+    <ClCompile Include="EseDataAccess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="esent.h" />

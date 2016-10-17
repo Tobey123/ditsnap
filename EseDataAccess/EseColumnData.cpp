@@ -7,14 +7,14 @@ namespace Ese
 	public:
 		Impl() {}
 		EseType type_{EseType::Nil};
-		vector<vector<unsigned char>> values_;
+		vector<ByteArray> values_;
 		bool isUnicode_{false};
-		wstring ConvertToString(vector<unsigned char> v) const;
+		wstring ConvertToString(ByteArray v) const;
 
 		DISALLOW_COPY_AND_ASSIGN(EseColumnData::Impl);
 	};
 
-	EseColumnData::EseColumnData(EseType type, vector<vector<unsigned char>> values, bool isUnicode): pimpl(new Impl) {
+	EseColumnData::EseColumnData(EseType type, vector<ByteArray> values, bool isUnicode): pimpl(new Impl) {
 		pimpl->type_ = type;
 		pimpl->values_ = values;
 		pimpl->isUnicode_ = isUnicode;
@@ -26,31 +26,7 @@ namespace Ese
 		return pimpl->type_;
 	}
 
-	wstring EseColumnData::GetColumnTypeString() const {
-		switch (pimpl->type_) {
-		case EseType::Nil: return L"Nil";
-		case EseType::Bit: return L"Bit";
-		case EseType::UnsignedByte: return L"UnsignedByte";
-		case EseType::Short: return L"Short";
-		case EseType::Long: return L"Long";
-		case EseType::Currency: return L"Currency";
-		case EseType::IEEESingle: return L"IEEESingle";
-		case EseType::IEEEDouble: return L"IEEEDouble";
-		case EseType::DateTime: return L"DateTime";
-		case EseType::Binary: return L"Binary";
-		case EseType::Text: return L"Text";
-		case EseType::LongBinary: return L"LongBinary";
-		case EseType::LongText: return L"LongText";
-		case EseType::SLV: return L"SLV";
-		case EseType::UnsignedLong: return L"UnsignedLong";
-		case EseType::LongLong: return L"LongLong";
-		case EseType::GUID: return L"GUID";
-		case EseType::UnsignedShort: return L"UnsignedShort";
-		default: return L"Unknown";
-		}
-	}
-
-	vector<vector<unsigned char>> EseColumnData::GetValues() const {
+	vector<ByteArray> EseColumnData::GetValues() const {
 		return pimpl->values_;
 	}
 
@@ -62,7 +38,7 @@ namespace Ese
 		return vals;
 	}
 		
-	wstring EseColumnData::Impl::ConvertToString(vector<unsigned char> v) const {
+	wstring EseColumnData::Impl::ConvertToString(ByteArray v) const {
 		if (v.size() == 0) {
 			return wstring(L"");
 		}

@@ -4,8 +4,6 @@
 #include "EseRepository.h"
 #include "../EseDataAccess/EseDataAccess.h"
 
-using namespace Ese;
-
 DetailDialog::DetailDialog(EseRepository* eseRepository,
                            TableListView* parent,
                            int rowIndex) : m_bMsgHandled(0), eseRepository_(eseRepository), parent_(parent), rowIndex_(rowIndex) {}
@@ -75,7 +73,7 @@ void DetailDialog::SetupListItems() {
 			auto adName = parent_->GetAdNameFromColumnName(columnName);
 			auto colData = eseRepository_->GetColumnData(i);
 			auto value = JoinString(colData->GetValuesAsString());
-			auto type = colData->GetColumnTypeString();
+			auto type = Ese::ToString(colData->GetType());
 			auto interpreted = Interpret(colData.get(), adName);
 			if (0 == value.size()) {
 				if (!filterNoValue) {
@@ -102,7 +100,7 @@ void DetailDialog::AddRow(int index, wstring name, wstring desc, wstring type, w
 	detailListView_.AddItem(index, 4, intepreted.c_str());
 }
 
-wstring DetailDialog::Interpret(EseColumnData* colData, wstring adName) const {
+wstring DetailDialog::Interpret(Ese::EseColumnData* colData, wstring adName) const {
 	auto shortFtType = vector<wstring>{ L"WHEN_CREATED", L"WHEN_CHANGED" };
 	auto ftType = vector<wstring>{ L"PWD_LAST_SET", L"LAST_LOGON", L"LAST_LOGOFF", L"ACCOUNT_EXPIRES" };
 	auto interpreted = wstring(L"");

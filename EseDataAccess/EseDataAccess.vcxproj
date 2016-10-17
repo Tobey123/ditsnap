@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EseColumn.cpp" />
+    <ClCompile Include="EseDataAccess.cpp" />
     <ClCompile Include="EseInstance.cpp" />
     <ClCompile Include="EseDatabase.cpp" />
     <ClCompile Include="EseTable.cpp" />

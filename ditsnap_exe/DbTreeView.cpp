@@ -5,12 +5,12 @@
 
 using namespace Ese;
 
-DbTreeView::DbTreeView(EseRepository* eseRepository) : eseRepository_(eseRepository) {
-	eseRepository_->RegisterDbObserver(this);
+DbTreeView::DbTreeView(EseRepository& eseRepository) : eseRepository_(eseRepository) {
+	eseRepository_.RegisterDbObserver(this);
 }
 
 DbTreeView::~DbTreeView(void) {
-	eseRepository_->RemoveDbObserver(this);
+	eseRepository_.RemoveDbObserver(this);
 }
 
 LRESULT DbTreeView::OnTreeDoubleClick(LPNMHDR pnmh) const {
@@ -25,7 +25,7 @@ LRESULT DbTreeView::OnTreeDoubleClick(LPNMHDR pnmh) const {
 	wchar_t tableName[1024];
 	if (GetItemText(hItem, tableName, sizeof(tableName) / sizeof(tableName[0]))) {
 		try {
-			eseRepository_->SetTable(tableName);
+			eseRepository_.SetTable(tableName);
 		}
 		catch (runtime_error& e) {
 			ShowMessageBox(e.what());
@@ -40,13 +40,13 @@ void DbTreeView::LoadEseRepository() {
 	CImageList images;
 	images.CreateFromImage(IDB_BITMAP1, 16, 0, RGB( 255, 0, 255 ), IMAGE_BITMAP, LR_CREATEDIBSECTION);
 	SetImageList(images);
-	auto hRootItem = InsertItem(eseRepository_->GetFilePath().c_str(), 0, 0, TVI_ROOT, TVI_LAST);
+	auto hRootItem = InsertItem(eseRepository_.GetFilePath().c_str(), 0, 0, TVI_ROOT, TVI_LAST);
 	if (hRootItem != nullptr) {
 		SetItemData(hRootItem, reinterpret_cast<DWORD_PTR>(hRootItem));
 	}
 
 	try {
-		auto tableNames = eseRepository_->GetTableNames();
+		auto tableNames = eseRepository_.GetTableNames();
 		for (auto& tableName : tableNames) {
 			auto hItem = InsertItem(tableName.c_str(), 1, 1, hRootItem, TVI_LAST);
 			if (hItem != nullptr) {

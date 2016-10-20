@@ -25,7 +25,7 @@ public:
 		COMMAND_HANDLER_EX(IDC_BUTTON_COPYALL, BN_CLICKED, OnCopyAllButtonClicked)
 		END_MSG_MAP()
 
-	DetailDialog(EseRepository* eseRepository, TableListView* paBrent, int rowIndex);
+	DetailDialog(EseRepository& eseRepository, TableListView* paBrent, int rowIndex);
 	~DetailDialog();
 	LRESULT OnInitDialog(HWND hWnd, LPARAM lParam);
 	void OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl);
@@ -33,7 +33,7 @@ public:
 	LRESULT OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow wndCtl);
 
 private:
-	EseRepository* eseRepository_;
+	EseRepository& eseRepository_;
 	TableListView* parent_;
 	CListViewCtrl detailListView_;
 	CButton checkBox_;

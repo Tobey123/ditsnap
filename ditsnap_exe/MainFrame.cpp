@@ -7,7 +7,7 @@
 
 using namespace Ese;
 
-MainFrame::MainFrame(EseRepository* eseRepository) : m_bMsgHandled(0), tableListView_(TableListView(eseRepository)),
+MainFrame::MainFrame(EseRepository& eseRepository) : m_bMsgHandled(0), tableListView_(TableListView(eseRepository)),
                                                    dbTreeView_(DbTreeView(eseRepository)),
                                                    eseRepository_(eseRepository) { }
 
@@ -46,7 +46,7 @@ void MainFrame::OnFileOpen(UINT uCode, int nID, HWND hwndCtrl) const {
 	}
 	if (fileDialog.DoModal() == IDOK) {
 		try {
-			eseRepository_->OpenFile(fileDialog.m_szFileName);
+			eseRepository_.OpenFile(fileDialog.m_szFileName);
 		}
 		catch (runtime_error& e) {
 			ShowMessageBox(e.what());
@@ -72,7 +72,7 @@ void MainFrame::OnFileSnapshot(UINT uCode, int nID, HWND hwndCtrl) const {
 		return;
 	auto snapshotFilePath = snapshotWizard.GetSnapshotFilePath();
 	if (nullptr != snapshotFilePath) {
-		eseRepository_->OpenFile(snapshotFilePath);
+		eseRepository_.OpenFile(snapshotFilePath);
 	}
 }
 

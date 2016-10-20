@@ -20,12 +20,12 @@ public:
 		DEFAULT_REFLECTION_HANDLER()
 		END_MSG_MAP()
 
-	DbTreeView(EseRepository* eseRepository);
+	explicit DbTreeView(EseRepository& eseRepository);
 	~DbTreeView(void);
 
 	LRESULT OnTreeDoubleClick(LPNMHDR pnmh) const;
 	virtual void LoadEseRepository() override;
 
 private:
-	EseRepository* eseRepository_;
+	EseRepository& eseRepository_;
 };

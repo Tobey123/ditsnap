@@ -7,16 +7,16 @@
 
 using namespace Ese;
 
-TableListView::TableListView(EseRepository* eseRepository) : detailDialog_(nullptr),
+TableListView::TableListView(EseRepository& eseRepository) : detailDialog_(nullptr),
                                                            eseRepository_(eseRepository) {
-	eseRepository_->RegisterTableObserver(this);
-	eseRepository_->RegisterDbObserver(this);
+	eseRepository_.RegisterTableObserver(this);
+	eseRepository_.RegisterDbObserver(this);
 }
 
 TableListView::~TableListView() {
 	CleanupDetailDialog();
-	eseRepository_->RemoveTableObserver(this);
-	eseRepository_->RemoveDbObserver(this);
+	eseRepository_.RemoveTableObserver(this);
+	eseRepository_.RemoveDbObserver(this);
 }
 
 LRESULT TableListView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
@@ -31,7 +31,7 @@ LRESULT TableListView::OnListDoubleClick(LPNMHDR pnmh) {
 		return 0;
 	}
 
-	if (DATATABLE == eseRepository_->GetCurrentTableName()) {
+	if (DATATABLE == eseRepository_.GetCurrentTableName()) {
 		CleanupDetailDialog();
 		detailDialog_ = new DetailDialog(eseRepository_, this,
 		                                 listItemIdToEseRowIndex_[pnmia->iItem]);
@@ -44,16 +44,16 @@ LRESULT TableListView::OnListDoubleClick(LPNMHDR pnmh) {
 void TableListView::LoadTable() {
 	const auto nWidth = 70;
 	try {
-		auto columnNames = eseRepository_->GetColumnNames();
+		auto columnNames = eseRepository_.GetColumnNames();
 		for (auto i = 0; i < columnNames.size(); ++i) {
 			InsertColumn(i, columnNames[i].c_str(), LVCFMT_LEFT, nWidth);
 		}
 
 		auto rowIndex = 0;
-		eseRepository_->MoveFirstRecord();
+		eseRepository_.MoveFirstRecord();
 		do {
 			for (auto i = 0; i < columnNames.size(); ++i) {
-				auto columnValues = eseRepository_->GetColumnDataAsString(i);
+				auto columnValues = eseRepository_.GetColumnDataAsString(i);
 				if (columnValues.empty()) {
 					columnValues = NOT_SET;
 				}
@@ -62,7 +62,7 @@ void TableListView::LoadTable() {
 			}
 			++rowIndex;
 		}
-		while (eseRepository_->MoveNextRecord());
+		while (eseRepository_.MoveNextRecord());
 	}
 	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
@@ -85,26 +85,26 @@ void TableListView::LoadDatatable() {
 		}
 
 		auto rowIndex = 0;
-		eseRepository_->MoveFirstRecord();
+		eseRepository_.MoveFirstRecord();
 		do {
 			for (auto i = 0; i < headerColumnNames.size(); ++i) {
 				auto columnName = headerColumnNames[i];
-				auto s = eseRepository_->GetColumnDataAsString(columnMap_[columnName]);
+				auto s = eseRepository_.GetColumnDataAsString(columnMap_[columnName]);
 				AddItem(rowIndex, i, s.c_str());
 			}
 			listItemIdToEseRowIndex_.insert(pair<int, int>(rowIndex, rowIndex));
 			++rowIndex;
-			auto rdn = eseRepository_->GetColumnData(columnMap_[L"ATTm589825"])->GetValuesAsString()[0];
-			auto dntbin = eseRepository_->GetColumnData(columnMap_[L"DNT_col"])->GetValues();
+			auto rdn = eseRepository_.GetColumnData(columnMap_[L"ATTm589825"])->GetValuesAsString()[0];
+			auto dntbin = eseRepository_.GetColumnData(columnMap_[L"DNT_col"])->GetValues();
 			auto dnt = *reinterpret_cast<int*>(dntbin[0].data());
 			dntRdnMap_.insert(pair<int, wstring>(dnt, rdn));
-			auto governIdbin = eseRepository_->GetColumnData(columnMap_[L"ATTc131094"])->GetValues();
+			auto governIdbin = eseRepository_.GetColumnData(columnMap_[L"ATTc131094"])->GetValues();
 			if (governIdbin.size() > 0) {
 				auto governId = *reinterpret_cast<int*>(governIdbin[0].data());
 				governsIdRdnMap_.insert(pair<int, wstring>(governId, rdn));
 			}
 		}
-		while (eseRepository_->MoveNextRecord());
+		while (eseRepository_.MoveNextRecord());
 	}
 	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
@@ -113,7 +113,7 @@ void TableListView::LoadDatatable() {
 
 void TableListView::FilterTable(int filterFlag) {
 	CleanupDetailDialog();
-	if (DATATABLE != eseRepository_->GetCurrentTableName()) {
+	if (DATATABLE != eseRepository_.GetCurrentTableName()) {
 		return;
 	}
 
@@ -125,7 +125,7 @@ void TableListView::FilterTable(int filterFlag) {
 	wstring subSchemaDnt;
 	wstring displaySpecifierDnt;
 	try {
-		eseRepository_->MoveFirstRecord();
+		eseRepository_.MoveFirstRecord();
 		do {
 			auto objectName = GetColumnData(L"ATTm589825");
 			if (classSchemaDnt.empty() && L"Class-Schema" == objectName) {
@@ -141,7 +141,7 @@ void TableListView::FilterTable(int filterFlag) {
 				displaySpecifierDnt = GetColumnData(L"DNT_col");
 			}
 		}
-		while (eseRepository_->MoveNextRecord());
+		while (eseRepository_.MoveNextRecord());
 	}
 	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
@@ -154,7 +154,7 @@ void TableListView::FilterTable(int filterFlag) {
 	try {
 		auto eseRowIndex = -1;
 		auto rowIndex = 0;
-		eseRepository_->MoveFirstRecord();
+		eseRepository_.MoveFirstRecord();
 		do {
 			++eseRowIndex;
 			auto objectCategory = GetColumnData(L"ATTb590606");
@@ -181,7 +181,7 @@ void TableListView::FilterTable(int filterFlag) {
 			listItemIdToEseRowIndex_.insert(pair<int, int>(rowIndex, eseRowIndex));
 			++rowIndex;
 		}
-		while (eseRepository_->MoveNextRecord());
+		while (eseRepository_.MoveNextRecord());
 	}
 	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
@@ -208,7 +208,7 @@ void TableListView::LoadEseTable() {
 	CleanupTable();
 	CleanupDetailDialog();
 
-	if (DATATABLE == eseRepository_->GetCurrentTableName()) {
+	if (DATATABLE == eseRepository_.GetCurrentTableName()) {
 		LoadDatatable();
 	}
 	else {
@@ -253,12 +253,12 @@ void TableListView::InsertColumnHelper(int nCol, wstring columnName, int nWidth)
 }
 
 wstring TableListView::GetColumnData(wstring columnName) {
-	return eseRepository_->GetColumnDataAsString(columnMap_[columnName]);
+	return eseRepository_.GetColumnDataAsString(columnMap_[columnName]);
 }
 
 bool TableListView::MapColumnNameToColumnIndex(map<wstring, int>& columnMap) const {
 	try {
-		auto columnNames = eseRepository_->GetColumnNames();
+		auto columnNames = eseRepository_.GetColumnNames();
 		for (auto i = 0; i < columnNames.size(); ++i) {
 			columnMap[columnNames[i]] = i;
 		}

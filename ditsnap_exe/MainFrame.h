@@ -28,7 +28,7 @@ public:
 		REFLECT_NOTIFICATIONS() // Message Reflection
 		END_MSG_MAP()
 
-	explicit MainFrame(EseRepository* eseRepository);
+	explicit MainFrame(EseRepository& eseRepository);
 
 	LRESULT OnCreate(LPCREATESTRUCT lpcs);
 	void OnFileExit(UINT uCode, int nID, HWND hwndCtrl);
@@ -42,7 +42,7 @@ private:
 	TableListView tableListView_;
 	DbTreeView dbTreeView_;
 	CSplitterWindow splitter_;
-	EseRepository* eseRepository_;
+	EseRepository& eseRepository_;
 
 	DISALLOW_COPY_AND_ASSIGN(MainFrame);
 };

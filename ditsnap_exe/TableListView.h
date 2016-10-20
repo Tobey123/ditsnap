@@ -25,7 +25,7 @@ public:
 		DEFAULT_REFLECTION_HANDLER()
 		END_MSG_MAP()
 
-	TableListView(EseRepository* eseRepository);
+	TableListView(EseRepository& eseRepository);
 	~TableListView();
 
 	LRESULT OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -47,7 +47,7 @@ private:
 	map<int, int> listItemIdToEseRowIndex_;
 	map<int, wstring> dntRdnMap_;
 	map<int, wstring> governsIdRdnMap_;
-	EseRepository* eseRepository_;
+	EseRepository& eseRepository_;
 
 	wstring GetColumnData(wstring columnName);
 	void CleanupTable();

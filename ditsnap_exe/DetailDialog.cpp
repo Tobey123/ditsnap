@@ -4,7 +4,7 @@
 #include "EseRepository.h"
 #include "../EseDataAccess/EseDataAccess.h"
 
-DetailDialog::DetailDialog(EseRepository* eseRepository,
+DetailDialog::DetailDialog(EseRepository& eseRepository,
                            TableListView* parent,
                            int rowIndex) : m_bMsgHandled(0), eseRepository_(eseRepository), parent_(parent), rowIndex_(rowIndex) {}
 
@@ -31,7 +31,7 @@ LRESULT DetailDialog::OnInitDialog(HWND hWnd, LPARAM lParam) {
 	checkBox_.SetCheck(1);
 
 	try {
-		eseRepository_->Move(rowIndex_);
+		eseRepository_.Move(rowIndex_);
 	}
 	catch (runtime_error& e) {
 		ShowMessageBox(e.what());
@@ -54,7 +54,7 @@ void DetailDialog::SetupTopLabel() const {
 	auto RDN = parent_->GetColumnIdFromColumnName(L"ATTm589825");
 	auto rdnLabel = GetDlgItem(IDC_RDN);
 	try {
-		auto rdn = eseRepository_->GetColumnDataAsString(RDN);
+		auto rdn = eseRepository_.GetColumnDataAsString(RDN);
 		rdnLabel.SetWindowTextW(rdn.c_str());
 	}
 	catch (runtime_error& e) {
@@ -67,11 +67,11 @@ void DetailDialog::SetupListItems() {
 		detailListView_.DeleteAllItems();
 		auto filterNoValue = !!checkBox_.GetCheck();
 		auto visibleColumnIndex = 0;
-		auto columnNames = eseRepository_->GetColumnNames();
+		auto columnNames = eseRepository_.GetColumnNames();
 		for (auto i = 0; i < columnNames.size(); ++i) {
 			auto columnName = columnNames[i];
 			auto adName = parent_->GetAdNameFromColumnName(columnName);
-			auto colData = eseRepository_->GetColumnData(i);
+			auto colData = eseRepository_.GetColumnData(i);
 			auto value = JoinString(colData->GetValuesAsString());
 			auto type = Ese::ToString(colData->GetType());
 			auto interpreted = Interpret(colData.get(), adName);

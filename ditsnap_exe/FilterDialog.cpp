@@ -2,7 +2,7 @@
 #include "FilterDialog.h"
 #include "resource.h"
 
-FilterDialog::FilterDialog(TableListView* mainListView) : mainListView_(mainListView) {};
+FilterDialog::FilterDialog(TableListView& mainListView) : mainListView_(mainListView) {};
 
 BOOL FilterDialog::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
 	CenterWindow();
@@ -31,7 +31,7 @@ void FilterDialog::OnOK(UINT uNotifyCode, int nID, CWindow wndCtl) {
 	filterFlag += checkBoxSubSchema_.GetCheck() << 2;
 	filterFlag += checkBoxDisplaySpecifier_.GetCheck() << 3;
 	filterFlag += checkBoxOthers_.GetCheck() << 4;
-	mainListView_->FilterTable(filterFlag);
+	mainListView_.FilterTable(filterFlag);
 	EndDialog(nID);
 }
 

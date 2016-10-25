@@ -3,8 +3,6 @@
 #include "resource.h"
 #include "util.h"
 
-using namespace Ese;
-
 DbTreeView::DbTreeView(EseRepository& eseRepository) : eseRepository_(eseRepository) {
 	eseRepository_.RegisterDbObserver(this);
 }

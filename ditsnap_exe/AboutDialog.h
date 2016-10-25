@@ -9,10 +9,10 @@ public:
 	};
 
 	BEGIN_MSG_MAP_EX(AboutDialog)
-		MSG_WM_INITDIALOG(OnInitDialog)
-		COMMAND_ID_HANDLER_EX(IDOK, OnClose)
-		COMMAND_ID_HANDLER_EX(IDCANCEL, OnClose)
-		END_MSG_MAP()
+	MSG_WM_INITDIALOG(OnInitDialog)
+	COMMAND_ID_HANDLER_EX(IDOK, OnClose)
+	COMMAND_ID_HANDLER_EX(IDCANCEL, OnClose)
+	END_MSG_MAP()
 
 	LRESULT OnInitDialog(HWND hWnd, LPARAM lParam) {
 		CenterWindow(GetParent());

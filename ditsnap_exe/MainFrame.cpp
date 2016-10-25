@@ -77,6 +77,6 @@ void MainFrame::OnFileSnapshot(UINT uCode, int nID, HWND hwndCtrl) const {
 }
 
 void MainFrame::OnToolFilter(UINT uCode, int nID, HWND hwndCtrl) {
-	FilterDialog filterDialog(&tableListView_);
+	FilterDialog filterDialog(tableListView_);
 	filterDialog.DoModal();
 }

@@ -16,9 +16,9 @@ public:
 	DECLARE_WND_SUPERCLASS(nullptr, CTreeViewCtrl::GetWndClassName())
 
 	BEGIN_MSG_MAP_EX(DbTreeView)
-		REFLECTED_NOTIFY_CODE_HANDLER_EX(NM_DBLCLK, OnTreeDoubleClick)
-		DEFAULT_REFLECTION_HANDLER()
-		END_MSG_MAP()
+	REFLECTED_NOTIFY_CODE_HANDLER_EX(NM_DBLCLK, OnTreeDoubleClick)
+	DEFAULT_REFLECTION_HANDLER()
+	END_MSG_MAP()
 
 	explicit DbTreeView(EseRepository& eseRepository);
 	~DbTreeView(void);

@@ -13,16 +13,14 @@ public:
 	explicit SnapshotWizardPage1(_U_STRINGorID title = static_cast<LPCTSTR>(nullptr)) : CPropertyPageImpl<SnapshotWizardPage1>(title) { }
 
 	BEGIN_MSG_MAP(SnapshotWizardPage1)
-		MSG_WM_INITDIALOG(OnInitDialog)
-		CHAIN_MSG_MAP(CPropertyPageImpl<SnapshotWizardPage1>)
-		END_MSG_MAP()
+	MSG_WM_INITDIALOG(OnInitDialog)
+	CHAIN_MSG_MAP(CPropertyPageImpl<SnapshotWizardPage1>)
+	END_MSG_MAP()
 
 	BOOL OnInitDialog(CWindow wndFocus, LPARAM lInitParam);
 	LRESULT OnWizardNext();
 
-	void SetSharedString(wchar_t* sharedStringPage1) {
-		sharedStringPage1_ = sharedStringPage1;
-	}
+	void SetSharedString(wchar_t* sharedStringPage1);
 
 private:
 	CEdit sourceEdit_;

@@ -64,6 +64,10 @@ LRESULT SnapshotWizardPage1::OnWizardNext() {
 	return 0;
 }
 
+void SnapshotWizardPage1::SetSharedString(wchar_t * sharedStringPage1) {
+	sharedStringPage1_ = sharedStringPage1;
+}
+
 BOOL SnapshotWizardPage1::InvokeEsentutilP(const wchar_t* targetDbPath) const {
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;

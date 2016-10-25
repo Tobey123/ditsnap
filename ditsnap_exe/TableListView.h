@@ -20,10 +20,10 @@ public:
 	DECLARE_WND_SUPERCLASS(nullptr, CListViewCtrl::GetWndClassName())
 
 	BEGIN_MSG_MAP_EX(TableListView)
-		MSG_WM_CREATE(OnCreate)
-		REFLECTED_NOTIFY_CODE_HANDLER_EX(NM_DBLCLK, OnListDoubleClick)
-		DEFAULT_REFLECTION_HANDLER()
-		END_MSG_MAP()
+	MSG_WM_CREATE(OnCreate)
+	REFLECTED_NOTIFY_CODE_HANDLER_EX(NM_DBLCLK, OnListDoubleClick)
+	DEFAULT_REFLECTION_HANDLER()
+	END_MSG_MAP()
 
 	TableListView(EseRepository& eseRepository);
 	~TableListView();

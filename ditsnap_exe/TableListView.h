@@ -41,7 +41,7 @@ public:
 	void LoadEseRepository() override;
 
 private:
-	DetailDialog* detailDialog_;
+	unique_ptr<DetailDialog> detailDialog_;
 	map<wstring, int> columnMap_;
 	map<wstring, wstring> adNameMap_;
 	map<int, int> listItemIdToEseRowIndex_;
@@ -59,4 +59,6 @@ private:
 	static constexpr const char* PROGRAM_NAME = "Ditsnap";
 	static constexpr const wchar_t* NOT_SET = L"<not set>";
 	static constexpr const wchar_t* DATATABLE = L"datatable";
+
+	DISALLOW_COPY_AND_ASSIGN(TableListView);
 };

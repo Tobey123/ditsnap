@@ -7,8 +7,8 @@
 
 using namespace Ese;
 
-MainFrame::MainFrame(EseRepository& eseRepository) : m_bMsgHandled(0), tableListView_(TableListView(eseRepository)),
-                                                   dbTreeView_(DbTreeView(eseRepository)),
+MainFrame::MainFrame(EseRepository& eseRepository) : m_bMsgHandled(0), tableListView_(new TableListView(eseRepository)),
+                                                   dbTreeView_(new DbTreeView(eseRepository)),
                                                    eseRepository_(eseRepository) { }
 
 LRESULT MainFrame::OnCreate(LPCREATESTRUCT lpcs) {
@@ -17,14 +17,14 @@ LRESULT MainFrame::OnCreate(LPCREATESTRUCT lpcs) {
 	m_hWndClient = splitter_.Create(m_hWnd, rcDefault, nullptr,
 	                                WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 	splitter_.SetSplitterExtendedStyle(0);
-	dbTreeView_.Create(splitter_, rcDefault, nullptr,
+	dbTreeView_->Create(splitter_, rcDefault, nullptr,
 	                   WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | TVS_HASLINES |
 	                   TVS_LINESATROOT | TVS_HASBUTTONS | TVS_SHOWSELALWAYS, WS_EX_CLIENTEDGE);
-	splitter_.SetSplitterPane(SPLIT_PANE_LEFT, dbTreeView_);
-	tableListView_.Create(splitter_, rcDefault, nullptr,
+	splitter_.SetSplitterPane(SPLIT_PANE_LEFT, *dbTreeView_);
+	tableListView_->Create(splitter_, rcDefault, nullptr,
 	                      WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | LVS_REPORT |
 	                      LVS_SHOWSELALWAYS, WS_EX_CLIENTEDGE);
-	splitter_.SetSplitterPane(SPLIT_PANE_RIGHT, tableListView_);
+	splitter_.SetSplitterPane(SPLIT_PANE_RIGHT, *tableListView_);
 	UpdateLayout();
 	splitter_.SetSplitterPosPct(25);
 	return 0;
@@ -77,6 +77,6 @@ void MainFrame::OnFileSnapshot(UINT uCode, int nID, HWND hwndCtrl) const {
 }
 
 void MainFrame::OnToolFilter(UINT uCode, int nID, HWND hwndCtrl) {
-	FilterDialog filterDialog(tableListView_);
+	FilterDialog filterDialog(*tableListView_);
 	filterDialog.DoModal();
 }

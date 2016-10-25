@@ -11,6 +11,7 @@ TableListView::TableListView(EseRepository& eseRepository) : detailDialog_(nullp
                                                            eseRepository_(eseRepository) {
 	eseRepository_.RegisterTableObserver(this);
 	eseRepository_.RegisterDbObserver(this);
+	MapColumnNameToAdName(adNameMap_);
 }
 
 TableListView::~TableListView() {
@@ -33,7 +34,7 @@ LRESULT TableListView::OnListDoubleClick(LPNMHDR pnmh) {
 
 	if (DATATABLE == eseRepository_.GetCurrentTableName()) {
 		CleanupDetailDialog();
-		detailDialog_ = new DetailDialog(eseRepository_, this,
+		detailDialog_= make_unique<DetailDialog>(eseRepository_, this,
 		                                 listItemIdToEseRowIndex_[pnmia->iItem]);
 		detailDialog_->Create(nullptr);
 		detailDialog_->ShowWindow(SW_SHOW);
@@ -71,11 +72,10 @@ void TableListView::LoadTable() {
 
 void TableListView::LoadDatatable() {
 	columnMap_.clear();
-	adNameMap_.clear();
 	dntRdnMap_.clear();
+	governsIdRdnMap_.clear();
 	listItemIdToEseRowIndex_.clear();
 	MapColumnNameToColumnIndex(columnMap_);
-	MapColumnNameToAdName(adNameMap_);
 	vector<wstring> headerColumnNames{L"ATTm589825", L"DNT_col", L"PDNT_col", L"cnt_col",
 		L"OBJ_col", L"RDNtyp_col", L"NCDNT_col", L"ATTb590606"};
 	try {
@@ -234,9 +234,6 @@ void TableListView::CleanupDetailDialog() {
 		if (detailDialog_->IsWindow()) {
 			detailDialog_->DestroyWindow();
 		}
-
-		delete detailDialog_;
-		detailDialog_ = nullptr;
 	}
 }
 

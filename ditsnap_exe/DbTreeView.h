@@ -28,4 +28,6 @@ public:
 
 private:
 	EseRepository& eseRepository_;
+
+	DISALLOW_COPY_AND_ASSIGN(DbTreeView);
 };

@@ -39,8 +39,8 @@ public:
 	void OnToolFilter(UINT uCode, int nID, HWND hwndCtrl);
 
 private:
-	TableListView tableListView_;
-	DbTreeView dbTreeView_;
+	unique_ptr<TableListView> tableListView_;
+	unique_ptr<DbTreeView> dbTreeView_;
 	CSplitterWindow splitter_;
 	EseRepository& eseRepository_;
 

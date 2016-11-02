@@ -174,7 +174,7 @@ void TableListView::FilterTable(int filterFlag) {
 		return;
 	}
 
-	vector<wstring> listHeaderColumnNames{L"ATTm589825", L"DNT_col", L"PDNT_col", L"cnt_col",
+	vector<wstring> columnNames{L"ATTm589825", L"DNT_col", L"PDNT_col", L"cnt_col",
 		L"OBJ_col", L"RDNtyp_col", L"NCDNT_col", L"ATTb590606"};
 
 	try {
@@ -200,8 +200,8 @@ void TableListView::FilterTable(int filterFlag) {
 			)
 				continue;
 
-			for (auto i = 0; i < listHeaderColumnNames.size(); ++i) {
-				auto s = GetColumnData(listHeaderColumnNames[i]);
+			for (auto i = 0; i < columnNames.size(); ++i) {
+				auto s = GetColumnData(columnNames[i]);
 				AddItem(rowIndex, i, s.c_str());
 			}
 			listItemIdToEseRowIndex_.insert(pair<int, int>(rowIndex, eseRowIndex));

@@ -2,7 +2,6 @@
 // Microsoft Visual C++ generated include file.
 // Used by ditsnap.rc
 //
-#pragma once
 #define IDD_ABOUTBOX                    100
 #define IDD_SCWIZARD1                   106
 #define IDR_MAINFRAME                   128
@@ -12,6 +11,7 @@
 #define IDI_ICON1                       207
 #define IDD_FILTER_DIALOG               208
 #define IDB_BITMAP1                     209
+#define IDR_MENU1                       210
 #define IDC_LIST1                       1000
 #define IDC_CHECK1                      1002
 #define IDC_OK_BUTTON                   1003
@@ -32,13 +32,20 @@
 #define ID_DISPLAYFILTER_ONLYINSTANCE   32780
 #define ID_DISPLAYFILTER_ONLYSCHEMA     32781
 #define ID_TOOL_FILTER                  32782
+#define ID_TEST1_TEST2                  32783
+#define ID_TOP_FILTER                   32784
+#define ID_TOP_PROPERTIES               32785
+#define ID_LV_MENU_TEST2                32786
+#define ID_LIST_VIEW_MENU_FIND          32787
+#define ID_LIST_VIEW_MENU_FILTER        32788
+#define ID_LIST_VIEW_MENU_DETAILS       32789
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        210
-#define _APS_NEXT_COMMAND_VALUE         32783
+#define _APS_NEXT_RESOURCE_VALUE        211
+#define _APS_NEXT_COMMAND_VALUE         32790
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

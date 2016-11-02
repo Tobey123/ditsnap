@@ -1,6 +1,6 @@
-
 #include "TableListView.h"
 #include "DetailDialog.h"
+#include "FilterDialog.h"
 #include "util.h"
 #include "EseRepository.h"
 #include "../EseDataAccess/EseDataAccess.h"
@@ -40,6 +40,32 @@ LRESULT TableListView::OnListDoubleClick(LPNMHDR pnmh) {
 		detailDialog_->ShowWindow(SW_SHOW);
 	}
 	return 0;
+}
+
+void TableListView::OnContextMenu(CWindow wnd, CPoint point) {
+	if (point.x == -1 && point.y == -1) {
+		point.SetPoint(0, 0);
+		ClientToScreen(&point);
+	}
+
+	CRect rc;
+	GetClientRect(&rc);
+	ClientToScreen(&rc);
+	if (rc.PtInRect(point)) {
+		CMenu menuPopup;
+		menuPopup.LoadMenu(IDR_MENU1);
+		menuPopup.GetSubMenu(0).TrackPopupMenu(
+			TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON,
+			point.x, point.y, m_hWnd);
+	}
+	else {
+		SetMsgHandled(false);
+	}
+}
+
+void TableListView::OnMenuFilterClicked(UINT uNotifyCode, int nID, CWindow wndCtl) {
+	FilterDialog filterDialog(*this);
+	filterDialog.DoModal();
 }
 
 void TableListView::LoadTable() {

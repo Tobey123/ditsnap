@@ -1,4 +1,5 @@
 #pragma once
+#include "resource.h"
 #include "Interfaces.h"
 
 class EseRepository;
@@ -21,6 +22,8 @@ public:
 
 	BEGIN_MSG_MAP_EX(TableListView)
 	MSG_WM_CREATE(OnCreate)
+	MSG_WM_CONTEXTMENU(OnContextMenu)
+	COMMAND_ID_HANDLER_EX(ID_LIST_VIEW_MENU_FILTER, OnMenuFilterClicked)
 	REFLECTED_NOTIFY_CODE_HANDLER_EX(NM_DBLCLK, OnListDoubleClick)
 	DEFAULT_REFLECTION_HANDLER()
 	END_MSG_MAP()
@@ -30,6 +33,8 @@ public:
 
 	LRESULT OnCreate(LPCREATESTRUCT lpCreateStruct);
 	LRESULT OnListDoubleClick(LPNMHDR pnmh);
+	void OnContextMenu(CWindow wnd, CPoint point);
+	void OnMenuFilterClicked(UINT uNotifyCode, int nID, CWindow wndCtl);
 	void LoadTable();
 	void LoadDatatable();
 	void FilterTable(int filterFlag);

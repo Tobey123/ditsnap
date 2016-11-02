@@ -1,16 +1,14 @@
-
 #include "FilterDialog.h"
-#include "resource.h"
 
-FilterDialog::FilterDialog(TableListView& mainListView) : mainListView_(mainListView) {};
+FilterDialog::FilterDialog(TableListView& mainListView) : tableListView_(mainListView) {};
 
 BOOL FilterDialog::OnInitDialog(CWindow wndFocus, LPARAM lInitParam) {
 	CenterWindow();
-	auto hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
-	                                           GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON));
+	auto hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR, 
+		GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON));
 	SetIcon(hIcon, TRUE);
-	HICON__* hIconSmall = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
-	                                                    GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
+	auto hIconSmall = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR,
+		GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON));
 	SetIcon(hIconSmall, FALSE);
 	checkBoxClassSchema_ = GetDlgItem(IDC_CHECK1);
 	checkBoxAttributeSchema_ = GetDlgItem(IDC_CHECK2);
@@ -31,7 +29,7 @@ void FilterDialog::OnOK(UINT uNotifyCode, int nID, CWindow wndCtl) {
 	filterFlag += checkBoxSubSchema_.GetCheck() << 2;
 	filterFlag += checkBoxDisplaySpecifier_.GetCheck() << 3;
 	filterFlag += checkBoxOthers_.GetCheck() << 4;
-	mainListView_.FilterTable(filterFlag);
+	tableListView_.FilterTable(filterFlag);
 	EndDialog(nID);
 }
 

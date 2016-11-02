@@ -22,7 +22,7 @@ public:
 	void OnCancel(UINT uNotifyCode, int nID, CWindow wndCtl);
 
 private:
-	TableListView& mainListView_;
+	TableListView& tableListView_;
 	CButton checkBoxClassSchema_;
 	CButton checkBoxAttributeSchema_;
 	CButton checkBoxSubSchema_;

@@ -208,6 +208,14 @@ BEGIN
     END
 END
 
+IDR_MENU1 MENU
+BEGIN
+    POPUP "list view menu"
+    BEGIN
+        MENUITEM "Filter...",                   ID_LIST_VIEW_MENU_FILTER
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -150,23 +150,34 @@ wstring DetailDialog::Interpret(Ese::EseColumnData* colData, wstring adName) con
 
 LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow wndCtl) {
 	CString copyText;
-	for (auto i = 0; i < detailListView_.GetItemCount(); ++i) {
-		CString s;
-		detailListView_.GetItemText(i, 0, s);
+	auto header = detailListView_.GetHeader();
+	auto nColumn = header.GetItemCount();
+	for (auto i = 0; i < nColumn; ++i) {
+		HDITEM item;
+		wchar_t buf[260];
+		item.mask = HDI_TEXT;
+		item.cchTextMax = 260;
+		item.pszText = buf;
+		header.GetItem(i, &item);
+		CString s(item.pszText);
 		copyText.Append(s);
-
-		CString temp;
-		detailListView_.GetItemText(i, 1, temp);
-		if (temp.IsEmpty()) {
-			s.Format(L": ");
+		if (i != nColumn - 1) {
+			copyText.Append(L",");
 		}
-		else {
-			s.Format(L" ( %s ): ", static_cast<const wchar_t*>(temp));
-		}
-		copyText.Append(s);
+	}
 
-		detailListView_.GetItemText(i, 2, s);
-		copyText.Append(s);
+	copyText.Append(L"\r\n");
+	auto nRow = detailListView_.GetItemCount();
+	for (auto i = 0; i < nRow; ++i) {
+		for (auto j = 0; j < nColumn; ++j) {
+			CString s;
+			detailListView_.GetItemText(i, j, s);
+			copyText.Append(s);
+			if (j != nColumn - 1) {
+				copyText.Append(L",");
+			}
+		}
+		
 		copyText.Append(L"\r\n");
 	}
 
@@ -174,6 +185,7 @@ LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow 
 		ShowMessageBox(L"Cannot open clipboard.");
 		return -1;
 	}
+	
 	int bufSize = (copyText.GetLength() + 1) * sizeof(wchar_t);
 	auto hBuf = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, bufSize);
 	auto pBuf = static_cast<wchar_t*>(GlobalLock(hBuf));
@@ -189,7 +201,7 @@ LRESULT DetailDialog::OnCopyAllButtonClicked(UINT uNotifyCode, int nID, CWindow 
 		CloseClipboard();
 		return 1;
 	}
+	
 	CloseClipboard();
-
 	return 0;
 }

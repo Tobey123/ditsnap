@@ -8,8 +8,10 @@ The executable is available here.
 ## Screenshots
 ### Main Window
 <img src="images/screenshot1.png" height="400">
+
 ### Detail Dialog
 <img src="images/screenshot2.png" height="400">
+
 ## Interpreted Value
 Interpreted Value column in Detail Dialog shows human-readable representaions of raw ESE column values. Here are the exmamples.
 #### OBJECT_CATEGORY
